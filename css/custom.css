@@ -1,0 +1,16 @@
+body::before {
+    content: "🎯 CSS文件已成功加载！";
+    display: block;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}

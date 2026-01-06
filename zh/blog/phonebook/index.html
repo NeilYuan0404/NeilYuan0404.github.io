@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>新手必做：一个简易通讯录带你入门C | Home</title>
+<meta name="keywords" content="C语言">
+<meta name="description" content="概览
+也许你是一位大学CS新生，也许你出于兴趣爱好刚学完C语法。
+可是，你是否困惑？
+
+指针应该使用在哪？
+双重指针是不是老手的炫技？
+为什么需要malloc和free？
+宏是什么？
+数据结构有什么用？
+
+一个基于C语言的简单通讯录，麻雀虽小，五脏俱全。它涉及了C语言语法中最让新手头疼的一些部分&mdash;-指针、malloc等；涉及了一个可靠项目的大体结构搭建&mdash;-业务、接口和底层；还涉及了与CS其他学科交叉的方面&mdash;-数据结构、文件I/O。如果你刚学完C语法，不知道接下来应该干什么？那么这个项目将会是一个很好的开始&mdash;-它足够简单：以至于你不会陷入复杂度的泥潭里失去对CS进一步学习的兴趣，它足够精炼：以至于你一定会学有所得，迫切地想要开展进一步的学习！">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/zh/blog/phonebook/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="http://localhost:1313/zh/blog/phonebook/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/zh/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                    <ul class="lang-switch"><li>|</li>
+                        <li>
+                            <a href="http://localhost:1313/en/" title="English"
+                                aria-label="English">En</a>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/zh/" title="主页">
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/about/" title="关于">
+                    <span>关于</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      新手必做：一个简易通讯录带你入门C
+    </h1>
+    <div class="post-meta"><span title='2025-11-16 13:55:00 +0800 CST'>2025年11月16日</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h3 id="概览">概览<a hidden class="anchor" aria-hidden="true" href="#概览">#</a></h3>
+<p>也许你是一位大学CS新生，也许你出于兴趣爱好刚学完C语法。</p>
+<p>可是，你是否困惑？</p>
+<ul>
+<li>指针应该使用在哪？</li>
+<li>双重指针是不是老手的炫技？</li>
+<li>为什么需要malloc和free？</li>
+<li>宏是什么？</li>
+<li>数据结构有什么用？</li>
+</ul>
+<p>一个基于C语言的简单通讯录，麻雀虽小，五脏俱全。它涉及了C语言语法中最让新手头疼的一些部分&mdash;-指针、malloc等；涉及了一个可靠项目的大体结构搭建&mdash;-业务、接口和底层；还涉及了与CS其他学科交叉的方面&mdash;-数据结构、文件I/O。如果你刚学完C语法，不知道接下来应该干什么？那么这个项目将会是一个很好的开始&mdash;-它足够简单：以至于你不会陷入复杂度的泥潭里失去对CS进一步学习的兴趣，它足够精炼：以至于你一定会学有所得，迫切地想要开展进一步的学习！</p>
+<hr>
+<h4 id="github链接">Github链接<a hidden class="anchor" aria-hidden="true" href="#github链接">#</a></h4>
+<p><a href="https://github.com/NeilYuan0404/Toys/tree/main/PhoneBook">基于Linux C的简易通讯录</a></p>
+<h4 id="通讯录的功能">通讯录的功能<a hidden class="anchor" aria-hidden="true" href="#通讯录的功能">#</a></h4>
+<ul>
+<li>1.添加人员</li>
+<li>2.打印人员</li>
+<li>3.删除人员</li>
+<li>4.搜索人员</li>
+<li>5.保存通讯录 （高级）</li>
+<li>6.加载通讯录（高级）</li>
+</ul>
+<h3 id="关键代码讲解">关键代码讲解<a hidden class="anchor" aria-hidden="true" href="#关键代码讲解">#</a></h3>
+<hr>
+<h5 id="一支持层">一、支持层<a hidden class="anchor" aria-hidden="true" href="#一支持层">#</a></h5>
+<p>Linus Torvalds 有一些非常著名的关于数据结构的评论：</p>
+<p><strong>&ldquo;我见过太多人因为‘应该使用更复杂的数据结构’而把代码搞砸。实际上，99%的情况下，你只需要一个简单的链表或哈希表就够了。&rdquo;</strong></p>
+<p><strong>&ldquo;糟糕的程序员关心代码，优秀的程序员关心数据结构和它们之间的关系。&rdquo;</strong></p>
+<p>不只是我们传奇的Linus，也许你会好奇，为什么CS的世界里，大家都在谈论着数据结构？&mdash;-因为数据结构代表着一个程序的底层逻辑，我们的实现接口和业务逻辑，都与这个底层逻辑挂钩。它影响着项目的效率、复杂度、可维护性、甚至趣味性。其实严格来说，不了解数据结构，就意味着不懂任何代码。</p>
+<p>支持层实现了最底层的数据结构，在通讯录项目中，使用<strong>双向链表</strong>来实现有如下好处：</p>
+<ul>
+<li>可动态拓展的大小</li>
+<li>高效率(O(1))的插入和删除操作</li>
+<li>最自然的遍历：一个for从头到尾</li>
+</ul>
+<p>而通讯录本身的数据结构其实只是这个双向链表的头节点。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="k">struct</span> <span class="n">person</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">  <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">NAME_LENGTH</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">  <span class="kt">char</span> <span class="n">phone</span><span class="p">[</span><span class="n">PHONE_LENGTH</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">  <span class="k">struct</span> <span class="n">person</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">  <span class="k">struct</span> <span class="n">person</span><span class="o">*</span> <span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="k">struct</span> <span class="n">contacts</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">  <span class="k">struct</span> <span class="n">person</span><span class="o">*</span> <span class="n">people</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">  <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h5 id="二接口层">二、接口层<a hidden class="anchor" aria-hidden="true" href="#二接口层">#</a></h5>
+<p>本项目中，接口层函数的功能和实现都十分简单易懂，但是值得注意的是，对于上述双向链表的底层数据结构的具体操作，是使用<strong>宏</strong>的方式来实现的。</p>
+<p>之所以使用宏来实现对底层数据结构的操作，有几方面的考虑，首先，宏可以<strong>避免函数调用的时候产生的开销</strong>，提升性能。其次，由于也不涉及复杂的逻辑操作，只是移动节点的指针之类的简单操作，所以使用宏所带来的<strong>调试复杂度可以忽略</strong>。</p>
+<pre><code>//用宏来实现对链表的insert和remove功能
+#define LIST_INSERT(item, list) do {		\
+    item-&gt;prev = NULL;				\
+    item-&gt;next = list;				\
+    if ((list) != NULL) (list)-&gt;prev = item;	\
+						\
+    list = item;				\
+  } while(0)					\
+
+#define LIST_REMOVE(item, list) do {				\
+    if (item-&gt;prev != NULL) item-&gt;prev-&gt;next = item-&gt;next;	\
+    if (item-&gt;next != NULL) item-&gt;next-&gt;prev = item-&gt;prev;	\
+    if (list == item) list = item-&gt;next;			\
+    item-&gt;prev = item-&gt;next = NULL;				\
+  } while(0)
+</code></pre>
+<p>定义好这一系列宏之后，接口层就得以调用他们来实现接口函数了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="o">//</span><span class="err">接口层逻辑实现</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="ne">int</span> <span class="n">person_insert</span><span class="p">(</span><span class="n">struct</span> <span class="n">person</span> <span class="o">**</span><span class="n">ppeople</span><span class="p">,</span> <span class="n">struct</span> <span class="n">person</span> <span class="o">*</span><span class="n">ps</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ps</span> <span class="o">==</span> <span class="n">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ppeople</span> <span class="o">==</span> <span class="n">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">  
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">  <span class="n">LIST_INSERT</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="o">*</span><span class="n">ppeople</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">  
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="ne">int</span> <span class="n">person_delete</span><span class="p">(</span><span class="n">struct</span> <span class="n">person</span> <span class="o">**</span><span class="n">ppeople</span><span class="p">,</span> <span class="n">struct</span> <span class="n">person</span> <span class="o">*</span><span class="n">ps</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ps</span> <span class="o">==</span> <span class="n">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">  
+</span></span><span class="line"><span class="ln">14</span><span class="cl">  <span class="n">LIST_REMOVE</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="o">*</span><span class="n">ppeople</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="n">struct</span> <span class="n">person</span><span class="o">*</span> <span class="n">person_search</span><span class="p">(</span><span class="n">struct</span> <span class="n">person</span> <span class="o">*</span><span class="n">people</span><span class="p">,</span> <span class="k">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">  
+</span></span><span class="line"><span class="ln">21</span><span class="cl">  <span class="n">struct</span> <span class="n">person</span> <span class="o">*</span><span class="n">item</span> <span class="o">=</span> <span class="n">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="n">item</span> <span class="o">=</span> <span class="n">people</span><span class="p">;</span><span class="n">item</span> <span class="o">!=</span> <span class="n">NULL</span><span class="p">;</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">  <span class="k">return</span> <span class="n">item</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">
+</span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="ne">int</span> <span class="n">person_traversal</span><span class="p">(</span><span class="n">struct</span> <span class="n">person</span> <span class="o">*</span><span class="n">people</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">  <span class="n">struct</span> <span class="n">person</span> <span class="o">*</span><span class="n">item</span> <span class="o">=</span> <span class="n">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="n">item</span> <span class="o">=</span> <span class="n">people</span><span class="p">;</span><span class="n">item</span> <span class="o">!=</span> <span class="n">NULL</span><span class="p">;</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">    <span class="n">INFO</span><span class="p">(</span><span class="s2">&#34;name: </span><span class="si">%s</span><span class="s2">, phone: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">item</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">item</span><span class="o">-&gt;</span><span class="n">phone</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="o">//</span><span class="err">结束接口层逻辑</span>
+</span></span></code></pre></div><p><strong>语法难点讲解：双重指针的使用</strong></p>
+<p>双重指针，顾名思义即为指针的指针，我们知道：在C语言中普通指针的基本功能是用于改变所指变量的值。可是当我们需要改变指针本身所指向的内容时，双重指针才能满足我们的需求。</p>
+<p><strong>假如</strong>在上述代码的<code>person_insert()</code>函数当中，我们使用people的普通指针(*people)而不是双重指针(**ppeople)作为参数传递，我们会遇到一个情况：</p>
+<p>people -&gt; next == NULL</p>
+<p>也就是说，我们的头节点people并没有指向任何<strong>实在的下一节点</strong>，而是NULL值。所以实现插入操作，无法直接在一个实在的下一节点的基础之上简单地对next和prev作更改。这时候，我们必须对让people指向的内容<strong>从NULL变成我们想要的实在的下一节点</strong>，也就是说，<strong>需要改变指针本身所指向的内容</strong>。</p>
+<hr>
+<h5 id="三业务层">三、业务层<a hidden class="anchor" aria-hidden="true" href="#三业务层">#</a></h5>
+<p>业务层的目标是<strong>隐藏对底层数据结构的访问的复杂度</strong>，让使用者得以聚焦于使用添加人员、删除人员等基本功能，或者，保存、加载通讯录等高级功能。通过调用接口层的函数来实现业务逻辑。</p>
+<h6 id="基本功能添加删除打印遍历">基本功能：添加、删除、打印、遍历<a hidden class="anchor" aria-hidden="true" href="#基本功能添加删除打印遍历">#</a></h6>
+<pre><code>int insert_entry(struct contacts *cts) {
+  if (cts == NULL) return -1;
+
+  struct person *p = (struct person*)malloc(sizeof(struct person));
+  if (p == NULL) return -2;
+
+  INFO(&quot;请输入姓名：\n&quot;);
+  scanf(&quot;%s&quot;, p-&gt;name);
+
+  INFO(&quot;请输入号码：\n&quot;);
+  scanf(&quot;%s&quot;, p-&gt;phone);
+
+  if (0 != person_insert(&amp;cts-&gt;people, p)) {
+    free(p);
+    return -3;
+  }
+  cts-&gt;count++;
+  return 0;  
+}
+
+int print_entry(struct contacts *cts) {
+  if (cts == NULL) return -1;
+  
+  person_traversal(cts-&gt;people);
+
+  return 0;
+}
+
+int delete_entry(struct contacts *cts) {
+  if (cts == NULL) return -1;
+
+  INFO(&quot;请输入姓名：\n&quot;);
+  char name[NAME_LENGTH] = {0};
+  scanf(&quot;%s&quot;, name);
+  struct person *ps = person_search(cts-&gt;people, name);
+  if (ps == NULL) {
+    INFO(&quot;不存在此人\n&quot;);
+    return -2;
+  }
+
+  person_delete(&amp;cts-&gt;people, ps);
+  free(ps);
+
+  return 0;
+}
+
+int search_entry(struct contacts *cts) {
+  if (cts == NULL) return -1;
+
+  INFO(&quot;请输入名字：\n&quot;);
+  char name[NAME_LENGTH] = {0};
+  scanf(&quot;%s&quot;, name);
+
+  struct person *ps = person_search(cts-&gt;people, name);
+  if (ps == NULL) {
+    INFO(&quot;不存在此人\n&quot;);
+    return -2;
+  }
+
+  INFO(&quot;姓名：%s,号码：%s\n&quot;, ps-&gt;name, ps-&gt;phone);
+
+  return 0;
+}    
+</code></pre>
+<p><strong>语法难点讲解：malloc() &amp; free()函数</strong></p>
+<p>之前我们提到了双向链表的好处，第一个就是动态调整大小。具体的代码实现如上面第4行代码所示。我们在插入一个新节点的时候，需要先使用malloc分配所需的空间，而且这样做的时候，是程序运行的时候，即<strong>运行时</strong>。这样就起到了动态调节链表大小的功效。</p>
+<p><code>struct person *p = (struct person*)malloc(sizeof(struct person));</code></p>
+<p>当我们调用malloc时，需要告诉它，我们需要<code>sizeof(struct person)</code>这么多的空间，也就是一个新节点的空间，然后它会返回一个指针，指向我们的新节点，以便我们进行操作。</p>
+<p>这里，只有当异常发生的时候才需要调用<code>free</code>释放空间，第14行，只有当添加节点的操作失败了，返回非0值的时候才会执行。</p>
+<h5 id="整合业务功能">整合业务功能<a hidden class="anchor" aria-hidden="true" href="#整合业务功能">#</a></h5>
+<p>其实这部分就很简单了，最直截了当的方式就是在main函数中用一些条件语句来整合各个业务层逻辑。我这里使用的是switch+枚举的方式实现，其实多if-else也可以。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="ln">1</span><span class="cl"><span class="k">enum</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">  <span class="n">OPEN_INSERT</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">  <span class="n">OPEN_PRINT</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">  <span class="n">OPEN_DELETE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">  <span class="n">OPEN_SEARCH</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl">  <span class="n">OPEN_SAVE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl">  <span class="n">OPEN_LOAD</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>以上是在开头就定义好的枚举变量，这么做主要是为了可读性。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">int main() {
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">  struct contacts *cts = malloc(sizeof(struct contacts));
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">  if (cts== NULL) return -1;
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">  memset(cts, 0, sizeof(struct contacts));
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">  
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">  while (1) {
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    menu_info();
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    int select = 0;
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    scanf(&#34;%d&#34;, &amp;select);
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    switch (select) {
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    case OPEN_INSERT: 
+</span></span><span class="line"><span class="ln">15</span><span class="cl">      insert_entry(cts); //添加
+</span></span><span class="line"><span class="ln">16</span><span class="cl">      break;
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    case OPEN_PRINT:
+</span></span><span class="line"><span class="ln">18</span><span class="cl">      print_entry(cts); //打印
+</span></span><span class="line"><span class="ln">19</span><span class="cl">      break;
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    case OPEN_DELETE:
+</span></span><span class="line"><span class="ln">21</span><span class="cl">      delete_entry(cts); //删除
+</span></span><span class="line"><span class="ln">22</span><span class="cl">      break;
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    case OPEN_SEARCH:
+</span></span><span class="line"><span class="ln">24</span><span class="cl">      search_entry(cts); //遍历
+</span></span><span class="line"><span class="ln">25</span><span class="cl">      break;
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    }    
+</span></span><span class="line"><span class="ln">27</span><span class="cl">  }
+</span></span><span class="line"><span class="ln">28</span><span class="cl">}
+</span></span></code></pre></div><h5 id="实机演示">实机演示<a hidden class="anchor" aria-hidden="true" href="#实机演示">#</a></h5>
+<p>添加与打印：添加Muggle和Mage</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="ln"> 1</span><span class="cl">neil@192 PhoneBook % ./a.out 
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">Ctrl-C退出
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="m">1</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">请输入姓名：
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">Muggle
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">请输入号码：
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="m">123</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln">22</span><span class="cl">
+</span></span><span class="line"><span class="ln">23</span><span class="cl">Ctrl-C退出
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="m">1</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">请输入姓名：
+</span></span><span class="line"><span class="ln">28</span><span class="cl">
+</span></span><span class="line"><span class="ln">29</span><span class="cl">Mage
+</span></span><span class="line"><span class="ln">30</span><span class="cl">
+</span></span><span class="line"><span class="ln">31</span><span class="cl">请输入号码：
+</span></span><span class="line"><span class="ln">32</span><span class="cl">
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="m">321</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">
+</span></span><span class="line"><span class="ln">35</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln">36</span><span class="cl">
+</span></span><span class="line"><span class="ln">37</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln">38</span><span class="cl">
+</span></span><span class="line"><span class="ln">39</span><span class="cl">Ctrl-C退出
+</span></span><span class="line"><span class="ln">40</span><span class="cl">
+</span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="m">2</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl">
+</span></span><span class="line"><span class="ln">43</span><span class="cl">name: Mage, phone: <span class="m">321</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl">
+</span></span><span class="line"><span class="ln">45</span><span class="cl">name: Muggle, phone: <span class="m">123</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl">
+</span></span><span class="line"><span class="ln">47</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln">48</span><span class="cl">
+</span></span><span class="line"><span class="ln">49</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln">50</span><span class="cl">
+</span></span><span class="line"><span class="ln">51</span><span class="cl">Ctrl-C退出
+</span></span></code></pre></div><p>删除与打印：删除Muggle</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="ln"> 1</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">Ctrl-C退出
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="m">3</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">请输入姓名：
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">Muggle
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">Ctrl-C退出
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="m">2</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">name: Mage, phone: <span class="m">321</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">
+</span></span><span class="line"><span class="ln">23</span><span class="cl">1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl">功能测试中：5.保存通讯录 6.加载通讯录 
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">Ctrl-C退出
+</span></span></code></pre></div><p>搜索人员：我们先添加Alice和Bob，然后尝试搜索Mage</p>
+<pre><code>1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+
+功能测试中：5.保存通讯录 6.加载通讯录 
+
+Ctrl-C退出
+
+2
+
+name: Bob, phone: 654
+
+name: Alice, phone: 456
+
+name: Mage, phone: 321
+
+1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+
+功能测试中：5.保存通讯录 6.加载通讯录 
+
+Ctrl-C退出
+
+4
+
+请输入名字：
+
+Mage
+
+姓名：Mage,号码：321
+
+1.添加人员 2.打印人员 3.删除人员 4.搜索人员 
+
+功能测试中：5.保存通讯录 6.加载通讯录 
+
+Ctrl-C退出
+</code></pre>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/zh/tags/c%E8%AF%AD%E8%A8%80/">C语言</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/zh/">Home</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
