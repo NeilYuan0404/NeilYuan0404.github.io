@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh" dir="auto" data-theme="auto">
-
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
-<title>使用shell查看当前局域网宕机的IP地址 | Home</title>
-<meta name="keywords" content="Shell, Linux">
-<meta name="description" content="测试环境 macOS 12
+<!doctype html><html lang=zh dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>使用shell查看当前局域网宕机的IP地址 | Home</title><meta name=keywords content="Shell,Linux"><meta name=description content="测试环境 macOS 12
 1neil@192 ~ % sysctl -n hw.model
 210Mac14,2
 3neil@192 ~ % sw_vers
@@ -22,343 +13,88 @@ ping : 我们使用ping来尝试连接，即测试是否宕机。
 shell中的for循环
 
 步骤：
-1.使用ifconfig查看自己的局域网网段">
-<meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/zh/blog/check_ip_shell/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="zh" href="http://localhost:1313/zh/blog/check_ip_shell/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
+1.使用ifconfig查看自己的局域网网段"><meta name=author content><link rel=canonical href=https://NeilYuan0404.github.io/zh/blog/check_ip_shell/><link crossorigin=anonymous href=/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css integrity="sha256-NDzEgLn/yPBMy+XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as=style><link rel=icon href=https://NeilYuan0404.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://NeilYuan0404.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://NeilYuan0404.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://NeilYuan0404.github.io/apple-touch-icon.png><link rel=mask-icon href=https://NeilYuan0404.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=zh href=https://NeilYuan0404.github.io/zh/blog/check_ip_shell/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://NeilYuan0404.github.io/zh/blog/check_ip_shell/"><meta property="og:site_name" content="Home"><meta property="og:title" content="使用shell查看当前局域网宕机的IP地址"><meta property="og:description" content="测试环境 macOS 12 1neil@192 ~ % sysctl -n hw.model 210Mac14,2 3neil@192 ~ % sw_vers 4ProductName: macOS 5ProductVersion: 12.7.4 6BuildVersion: 21H1123 7neil@192 ~ % 用到的命令： ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。 ping : 我们使用ping来尝试连接，即测试是否宕机。 shell中的for循环 步骤： 1.使用ifconfig查看自己的局域网网段"><meta property="og:locale" content="zh-cn"><meta property="og:type" content="article"><meta property="article:section" content="blog"><meta property="article:published_time" content="2025-11-14T22:48:24+08:00"><meta property="article:modified_time" content="2025-11-14T22:48:24+08:00"><meta property="article:tag" content="Shell"><meta property="article:tag" content="Linux"><meta name=twitter:card content="summary"><meta name=twitter:title content="使用shell查看当前局域网宕机的IP地址"><meta name=twitter:description content="测试环境 macOS 12
+1neil@192 ~ % sysctl -n hw.model
+210Mac14,2
+3neil@192 ~ % sw_vers
+4ProductName: macOS
+5ProductVersion: 12.7.4
+6BuildVersion: 21H1123
+7neil@192 ~ %
+用到的命令：
 
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-                color-scheme: dark;
-            }
+ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。
+ping : 我们使用ping来尝试连接，即测试是否宕机。
+shell中的for循环
 
-            .list {
-                background: var(--theme);
-            }
-
-            .toc {
-                background: var(--entry);
-            }
-        }
-
-        @media (prefers-color-scheme: light) {
-            .list::-webkit-scrollbar-thumb {
-                border-color: var(--code-bg);
-            }
-        }
-
-    </style>
-</noscript>
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else if (localStorage.getItem("pref-theme") === "light") {
-       document.querySelector("html").dataset.theme = 'light';
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else {
-        document.querySelector("html").dataset.theme = 'light';
-    }
-
-</script>
-</head>
-<body id="top">
-    <header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="http://localhost:1313/zh/" accesskey="h" title="Home (Alt + H)">Home</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-                    <ul class="lang-switch"><li>|</li>
-                        <li>
-                            <a href="http://localhost:1313/en/" title="English"
-                                aria-label="English">En</a>
-                        </li>
-                    </ul>
-            </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="http://localhost:1313/zh/" title="主页">
-                    <span>主页</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/zh/tags/" title="标签">
-                    <span>标签</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/zh/archives/" title="归档">
-                    <span>归档</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/zh/about/" title="关于">
-                    <span>关于</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main">
-
-<article class="post-single">
-  <header class="post-header">
-    
-    <h1 class="post-title entry-hint-parent">
-      使用shell查看当前局域网宕机的IP地址
-    </h1>
-    <div class="post-meta"><span title='2025-11-14 22:48:24 +0800 CST'>2025年11月14日</span>
-
-</div>
-  </header> 
-  <div class="post-content"><h4 id="测试环境-macos-12">测试环境 macOS 12<a hidden class="anchor" aria-hidden="true" href="#测试环境-macos-12">#</a></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="ln">1</span><span class="cl">neil@192 ~ % sysctl -n hw.model
-</span></span><span class="line"><span class="ln">2</span><span class="cl">10Mac14,2
-</span></span><span class="line"><span class="ln">3</span><span class="cl">neil@192 ~ % sw_vers
-</span></span><span class="line"><span class="ln">4</span><span class="cl">ProductName: macOS
-</span></span><span class="line"><span class="ln">5</span><span class="cl">ProductVersion: 12.7.4
-</span></span><span class="line"><span class="ln">6</span><span class="cl">BuildVersion: 21H1123
-</span></span><span class="line"><span class="ln">7</span><span class="cl">neil@192 ~ %
-</span></span></code></pre></div><h4 id="用到的命令">用到的命令：<a hidden class="anchor" aria-hidden="true" href="#用到的命令">#</a></h4>
-<ul>
-<li>ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。</li>
-<li>ping : 我们使用ping来尝试连接，即测试是否宕机。</li>
-<li>shell中的for循环</li>
-</ul>
-<h4 id="步骤">步骤：<a hidden class="anchor" aria-hidden="true" href="#步骤">#</a></h4>
-<p>1.使用ifconfig查看自己的局域网网段</p>
-<ul>
-<li>补充说明：grep -E 拓展的正则表达式</li>
-<li>第十行：找到我所在的局域网网段为192.168.1.xxx</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1"># 使用ifconfig查看自己的局域网网段</span>
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl">neil@192 ~ % ifconfig <span class="p">|</span> grep -E <span class="s2">&#34;(inet|netmask)&#34;</span>
-</span></span><span class="line"><span class="ln"> 3</span><span class="cl">inet 127.0.0.1 netmask 0xff000000 
-</span></span><span class="line"><span class="ln"> 4</span><span class="cl">inet6 ::1 prefixlen 128 
-</span></span><span class="line"><span class="ln"> 5</span><span class="cl">inet6 fe80::1%lo0 prefixlen <span class="m">64</span> scopeid 0x1 
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl">inet6 fe80::3482:e3ff:feed:b18%anpi1 prefixlen <span class="m">64</span> scopeid 0x4 
-</span></span><span class="line"><span class="ln"> 7</span><span class="cl">inet6 fe80::3482:e3ff:feed:b17%anpi0 prefixlen <span class="m">64</span> scopeid 0x5 
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl">inet6 fe80::1818:edca:8495:3b76%en0 prefixlen <span class="m">64</span> secured scopeid 0xb 
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"># 下面这一行就是我们的局域网所在网段</span>
-</span></span><span class="line"><span class="ln">10</span><span class="cl">inet 192.168.1.7 netmask 0xffffff00 broadcast 192.168.1.255
-</span></span><span class="line"><span class="ln">11</span><span class="cl">inet6 240e:3ba:30b9:de60:1871:4e51:fb11:b7ac prefixlen <span class="m">64</span> autoconf secured 
-</span></span><span class="line"><span class="ln">12</span><span class="cl">inet6 240e:3ba:30b9:de60:cd3e:16b3:6d8:f28 prefixlen <span class="m">64</span> autoconf temporary 
-</span></span><span class="line"><span class="ln">13</span><span class="cl">inet6 fe80::78d5:4bff:fe0c:9a5d%awdl0 prefixlen <span class="m">64</span> scopeid 0xc 
-</span></span><span class="line"><span class="ln">14</span><span class="cl">inet6 fe80::78d5:4bff:fe0c:9a5d%llw0 prefixlen <span class="m">64</span> scopeid 0xd 
-</span></span><span class="line"><span class="ln">15</span><span class="cl">inet6 fe80::5aac:6efa:9d96:7e94%utun3 prefixlen <span class="m">64</span> scopeid 0x12 
-</span></span><span class="line"><span class="ln">16</span><span class="cl">inet6 fe80::d617:1ed0:a01f:8bd4%utun4 prefixlen <span class="m">64</span> scopeid 0x13 
-</span></span><span class="line"><span class="ln">17</span><span class="cl">inet6 fe80::ce81:b1c:bd2c:69e%utun5 prefixlen <span class="m">64</span> scopeid 0x14
-</span></span></code></pre></div><p>2.让我们来编写一个带有for循环的shell脚本来尝试ping所有本局域网内的地址：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ping.sh" data-lang="ping.sh"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl">
-</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"># 从192.168.1.1 到 192.168.1.254</span>
-</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">for</span> i in <span class="o">{</span>1..254<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
-</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="c1"># 使用ping</span>
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    ping -c <span class="m">2</span> -i 0.5 192.168.1.<span class="nv">$i</span>    
-</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl">	<span class="nb">echo</span> <span class="s2">&#34;192.168.1.</span><span class="nv">$i</span><span class="s2"> is up&#34;</span>
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="k">else</span>
-</span></span><span class="line"><span class="ln">10</span><span class="cl">	<span class="nb">echo</span> <span class="s2">&#34;192.168.1.</span><span class="nv">$i</span><span class="s2"> is down&#34;</span>
-</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="k">fi</span>
-</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="k">done</span>
-</span></span></code></pre></div><p>别忘了赋予使用<code>chmod +x ping.sh</code>来赋予脚本执行权限。</p>
-<p>3.执行脚本，得到测试结果。</p>
-<h4 id="一个小技巧改进输出结果">一个小技巧改进输出结果<a hidden class="anchor" aria-hidden="true" href="#一个小技巧改进输出结果">#</a></h4>
-<p>以上方法虽然已经足够实现功能，然而美中不足的地方在于，直接echo ping输出的内容又多又杂，可读性比较差，我们只关心IP地址和是否宕机的话，可以对pīng.sh如下改进:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl">
-</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"># from 192.168.1.1 to 192.168.1.254</span>
-</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
-</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="k">for</span> i in <span class="o">{</span>1..254<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    
-</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="c1"># 现在，我们将无用的信息重定向进/dev/null当中</span>
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    ping -c <span class="m">2</span> -i 0.5 192.168.1.<span class="nv">$i</span> <span class="p">&amp;</span>&gt; /dev/null
-</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="ln">11</span><span class="cl">	<span class="nb">echo</span> <span class="s2">&#34;192.168.1.</span><span class="nv">$i</span><span class="s2"> is up&#34;</span>
-</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">else</span>
-</span></span><span class="line"><span class="ln">13</span><span class="cl">	<span class="nb">echo</span> <span class="s2">&#34;192.168.1.</span><span class="nv">$i</span><span class="s2"> is down&#34;</span>
-</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="k">fi</span>
-</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="k">done</span>
-</span></span></code></pre></div><p>再次运行，我们得到了清爽的结果：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="ln"> 1</span><span class="cl">neil@192 00_shell % ./ping.sh
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl">192.168.1.1 is up
-</span></span><span class="line"><span class="ln"> 3</span><span class="cl">192.168.1.2 is down
-</span></span><span class="line"><span class="ln"> 4</span><span class="cl">192.168.1.3 is up
-</span></span><span class="line"><span class="ln"> 5</span><span class="cl">192.168.1.4 is down
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl">192.168.1.5 is down
-</span></span><span class="line"><span class="ln"> 7</span><span class="cl">192.168.1.6 is up
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl">192.168.1.7 is up
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl">192.168.1.8 is down
-</span></span><span class="line"><span class="ln">10</span><span class="cl">192.168.1.9 is down
-</span></span><span class="line"><span class="ln">11</span><span class="cl">192.168.1.10 is down
-</span></span><span class="line"><span class="ln">12</span><span class="cl">192.168.1.11 is down
-</span></span></code></pre></div><h4 id="补充知识">补充知识<a hidden class="anchor" aria-hidden="true" href="#补充知识">#</a></h4>
-<table>
-  <thead>
-      <tr>
-          <th>IP地址</th>
-          <th>用途</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>192.168.1.0</strong></td>
-          <td><strong>网络地址</strong></td>
-          <td>标识整个网络，设备不能用</td>
-      </tr>
-      <tr>
-          <td><strong>192.168.1.1</strong></td>
-          <td>通常为<strong>网关</strong></td>
-          <td>路由器/网关地址</td>
-      </tr>
-      <tr>
-          <td><strong>192.168.1.2 - 192.168.1.254</strong></td>
-          <td><strong>可用主机地址</strong></td>
-          <td>设备可以使用的IP</td>
-      </tr>
-      <tr>
-          <td><strong>192.168.1.255</strong></td>
-          <td><strong>广播地址</strong></td>
-          <td>全网广播，设备不能用</td>
-      </tr>
-  </tbody>
-</table>
-
-
-  </div>
-
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="http://localhost:1313/zh/tags/shell/">Shell</a></li>
-      <li><a href="http://localhost:1313/zh/tags/linux/">Linux</a></li>
-    </ul>
-  </footer>
-</article>
-    </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/zh/">Home</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu');
-    if (menu) {
-        
-        const scrollPosition = localStorage.getItem("menu-scroll-position");
-        if (scrollPosition) {
-            menu.scrollLeft = parseInt(scrollPosition, 10);
-        }
-        
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
-</body>
-
-</html>
+步骤：
+1.使用ifconfig查看自己的局域网网段"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blogs","item":"https://NeilYuan0404.github.io/zh/blog/"},{"@type":"ListItem","position":2,"name":"使用shell查看当前局域网宕机的IP地址","item":"https://NeilYuan0404.github.io/zh/blog/check_ip_shell/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"使用shell查看当前局域网宕机的IP地址","name":"使用shell查看当前局域网宕机的IP地址","description":"测试环境 macOS 12 1neil@192 ~ % sysctl -n hw.model 210Mac14,2 3neil@192 ~ % sw_vers 4ProductName: macOS 5ProductVersion: 12.7.4 6BuildVersion: 21H1123 7neil@192 ~ % 用到的命令： ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。 ping : 我们使用ping来尝试连接，即测试是否宕机。 shell中的for循环 步骤： 1.使用ifconfig查看自己的局域网网段\n","keywords":["Shell","Linux"],"articleBody":"测试环境 macOS 12 1neil@192 ~ % sysctl -n hw.model 210Mac14,2 3neil@192 ~ % sw_vers 4ProductName: macOS 5ProductVersion: 12.7.4 6BuildVersion: 21H1123 7neil@192 ~ % 用到的命令： ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。 ping : 我们使用ping来尝试连接，即测试是否宕机。 shell中的for循环 步骤： 1.使用ifconfig查看自己的局域网网段\n补充说明：grep -E 拓展的正则表达式 第十行：找到我所在的局域网网段为192.168.1.xxx 1# 使用ifconfig查看自己的局域网网段 2neil@192 ~ % ifconfig | grep -E \"(inet|netmask)\" 3inet 127.0.0.1 netmask 0xff000000 4inet6 ::1 prefixlen 128 5inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1 6inet6 fe80::3482:e3ff:feed:b18%anpi1 prefixlen 64 scopeid 0x4 7inet6 fe80::3482:e3ff:feed:b17%anpi0 prefixlen 64 scopeid 0x5 8inet6 fe80::1818:edca:8495:3b76%en0 prefixlen 64 secured scopeid 0xb 9# 下面这一行就是我们的局域网所在网段 10inet 192.168.1.7 netmask 0xffffff00 broadcast 192.168.1.255 11inet6 240e:3ba:30b9:de60:1871:4e51:fb11:b7ac prefixlen 64 autoconf secured 12inet6 240e:3ba:30b9:de60:cd3e:16b3:6d8:f28 prefixlen 64 autoconf temporary 13inet6 fe80::78d5:4bff:fe0c:9a5d%awdl0 prefixlen 64 scopeid 0xc 14inet6 fe80::78d5:4bff:fe0c:9a5d%llw0 prefixlen 64 scopeid 0xd 15inet6 fe80::5aac:6efa:9d96:7e94%utun3 prefixlen 64 scopeid 0x12 16inet6 fe80::d617:1ed0:a01f:8bd4%utun4 prefixlen 64 scopeid 0x13 17inet6 fe80::ce81:b1c:bd2c:69e%utun5 prefixlen 64 scopeid 0x14 2.让我们来编写一个带有for循环的shell脚本来尝试ping所有本局域网内的地址：\n1#!/bin/bash 2 3# 从192.168.1.1 到 192.168.1.254 4for i in {1..254}; do 5 # 使用ping 6 ping -c 2 -i 0.5 192.168.1.$i 7 if [ $? -eq 0 ]; then 8\techo \"192.168.1.$i is up\" 9 else 10\techo \"192.168.1.$i is down\" 11 fi 12done 别忘了赋予使用chmod +x ping.sh来赋予脚本执行权限。\n3.执行脚本，得到测试结果。\n一个小技巧改进输出结果 以上方法虽然已经足够实现功能，然而美中不足的地方在于，直接echo ping输出的内容又多又杂，可读性比较差，我们只关心IP地址和是否宕机的话，可以对pīng.sh如下改进:\n1#!/bin/bash 2 3# from 192.168.1.1 to 192.168.1.254 4 5for i in {1..254}; do 6 7 # 现在，我们将无用的信息重定向进/dev/null当中 8 9 ping -c 2 -i 0.5 192.168.1.$i \u0026\u003e /dev/null 10 if [ $? -eq 0 ]; then 11\techo \"192.168.1.$i is up\" 12 else 13\techo \"192.168.1.$i is down\" 14 fi 15done 再次运行，我们得到了清爽的结果：\n1neil@192 00_shell % ./ping.sh 2192.168.1.1 is up 3192.168.1.2 is down 4192.168.1.3 is up 5192.168.1.4 is down 6192.168.1.5 is down 7192.168.1.6 is up 8192.168.1.7 is up 9192.168.1.8 is down 10192.168.1.9 is down 11192.168.1.10 is down 12192.168.1.11 is down 补充知识 IP地址 用途 说明 192.168.1.0 网络地址 标识整个网络，设备不能用 192.168.1.1 通常为网关 路由器/网关地址 192.168.1.2 - 192.168.1.254 可用主机地址 设备可以使用的IP 192.168.1.255 广播地址 全网广播，设备不能用 ","wordCount":"756","inLanguage":"zh","datePublished":"2025-11-14T22:48:24+08:00","dateModified":"2025-11-14T22:48:24+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://NeilYuan0404.github.io/zh/blog/check_ip_shell/"},"publisher":{"@type":"Organization","name":"Home","logo":{"@type":"ImageObject","url":"https://NeilYuan0404.github.io/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=nav><div class=logo><a href=https://NeilYuan0404.github.io/zh/ accesskey=h title="Home (Alt + H)">Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button><ul class=lang-switch><li>|</li><li><a href=https://NeilYuan0404.github.io/en/ title=English aria-label=English>En</a></li></ul></div></div><ul id=menu><li><a href=https://NeilYuan0404.github.io/zh/ title=主页><span>主页</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/ title=标签><span>标签</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/archives/ title=归档><span>归档</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/about/ title=关于><span>关于</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">使用shell查看当前局域网宕机的IP地址</h1><div class=post-meta><span title='2025-11-14 22:48:24 +0800 CST'>2025年11月14日</span></div></header><div class=post-content><h4 id=测试环境-macos-12>测试环境 macOS 12<a hidden class=anchor aria-hidden=true href=#测试环境-macos-12>#</a></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-zsh data-lang=zsh><span class=line><span class=ln>1</span><span class=cl>neil@192 ~ % sysctl -n hw.model
+</span></span><span class=line><span class=ln>2</span><span class=cl>10Mac14,2
+</span></span><span class=line><span class=ln>3</span><span class=cl>neil@192 ~ % sw_vers
+</span></span><span class=line><span class=ln>4</span><span class=cl>ProductName: macOS
+</span></span><span class=line><span class=ln>5</span><span class=cl>ProductVersion: 12.7.4
+</span></span><span class=line><span class=ln>6</span><span class=cl>BuildVersion: 21H1123
+</span></span><span class=line><span class=ln>7</span><span class=cl>neil@192 ~ %
+</span></span></code></pre></div><h4 id=用到的命令>用到的命令：<a hidden class=anchor aria-hidden=true href=#用到的命令>#</a></h4><ul><li>ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。</li><li>ping : 我们使用ping来尝试连接，即测试是否宕机。</li><li>shell中的for循环</li></ul><h4 id=步骤>步骤：<a hidden class=anchor aria-hidden=true href=#步骤>#</a></h4><p>1.使用ifconfig查看自己的局域网网段</p><ul><li>补充说明：grep -E 拓展的正则表达式</li><li>第十行：找到我所在的局域网网段为192.168.1.xxx</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-zsh data-lang=zsh><span class=line><span class=ln> 1</span><span class=cl><span class=c1># 使用ifconfig查看自己的局域网网段</span>
+</span></span><span class=line><span class=ln> 2</span><span class=cl>neil@192 ~ % ifconfig <span class=p>|</span> grep -E <span class=s2>&#34;(inet|netmask)&#34;</span>
+</span></span><span class=line><span class=ln> 3</span><span class=cl>inet 127.0.0.1 netmask 0xff000000 
+</span></span><span class=line><span class=ln> 4</span><span class=cl>inet6 ::1 prefixlen 128 
+</span></span><span class=line><span class=ln> 5</span><span class=cl>inet6 fe80::1%lo0 prefixlen <span class=m>64</span> scopeid 0x1 
+</span></span><span class=line><span class=ln> 6</span><span class=cl>inet6 fe80::3482:e3ff:feed:b18%anpi1 prefixlen <span class=m>64</span> scopeid 0x4 
+</span></span><span class=line><span class=ln> 7</span><span class=cl>inet6 fe80::3482:e3ff:feed:b17%anpi0 prefixlen <span class=m>64</span> scopeid 0x5 
+</span></span><span class=line><span class=ln> 8</span><span class=cl>inet6 fe80::1818:edca:8495:3b76%en0 prefixlen <span class=m>64</span> secured scopeid 0xb 
+</span></span><span class=line><span class=ln> 9</span><span class=cl><span class=c1># 下面这一行就是我们的局域网所在网段</span>
+</span></span><span class=line><span class=ln>10</span><span class=cl>inet 192.168.1.7 netmask 0xffffff00 broadcast 192.168.1.255
+</span></span><span class=line><span class=ln>11</span><span class=cl>inet6 240e:3ba:30b9:de60:1871:4e51:fb11:b7ac prefixlen <span class=m>64</span> autoconf secured 
+</span></span><span class=line><span class=ln>12</span><span class=cl>inet6 240e:3ba:30b9:de60:cd3e:16b3:6d8:f28 prefixlen <span class=m>64</span> autoconf temporary 
+</span></span><span class=line><span class=ln>13</span><span class=cl>inet6 fe80::78d5:4bff:fe0c:9a5d%awdl0 prefixlen <span class=m>64</span> scopeid 0xc 
+</span></span><span class=line><span class=ln>14</span><span class=cl>inet6 fe80::78d5:4bff:fe0c:9a5d%llw0 prefixlen <span class=m>64</span> scopeid 0xd 
+</span></span><span class=line><span class=ln>15</span><span class=cl>inet6 fe80::5aac:6efa:9d96:7e94%utun3 prefixlen <span class=m>64</span> scopeid 0x12 
+</span></span><span class=line><span class=ln>16</span><span class=cl>inet6 fe80::d617:1ed0:a01f:8bd4%utun4 prefixlen <span class=m>64</span> scopeid 0x13 
+</span></span><span class=line><span class=ln>17</span><span class=cl>inet6 fe80::ce81:b1c:bd2c:69e%utun5 prefixlen <span class=m>64</span> scopeid 0x14
+</span></span></code></pre></div><p>2.让我们来编写一个带有for循环的shell脚本来尝试ping所有本局域网内的地址：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ping.sh data-lang=ping.sh><span class=line><span class=ln> 1</span><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=ln> 2</span><span class=cl>
+</span></span><span class=line><span class=ln> 3</span><span class=cl><span class=c1># 从192.168.1.1 到 192.168.1.254</span>
+</span></span><span class=line><span class=ln> 4</span><span class=cl><span class=k>for</span> i in <span class=o>{</span>1..254<span class=o>}</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=ln> 5</span><span class=cl>    <span class=c1># 使用ping</span>
+</span></span><span class=line><span class=ln> 6</span><span class=cl>    ping -c <span class=m>2</span> -i 0.5 192.168.1.<span class=nv>$i</span>    
+</span></span><span class=line><span class=ln> 7</span><span class=cl>    <span class=k>if</span> <span class=o>[</span> <span class=nv>$?</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=ln> 8</span><span class=cl>	<span class=nb>echo</span> <span class=s2>&#34;192.168.1.</span><span class=nv>$i</span><span class=s2> is up&#34;</span>
+</span></span><span class=line><span class=ln> 9</span><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=ln>10</span><span class=cl>	<span class=nb>echo</span> <span class=s2>&#34;192.168.1.</span><span class=nv>$i</span><span class=s2> is down&#34;</span>
+</span></span><span class=line><span class=ln>11</span><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=ln>12</span><span class=cl><span class=k>done</span>
+</span></span></code></pre></div><p>别忘了赋予使用<code>chmod +x ping.sh</code>来赋予脚本执行权限。</p><p>3.执行脚本，得到测试结果。</p><h4 id=一个小技巧改进输出结果>一个小技巧改进输出结果<a hidden class=anchor aria-hidden=true href=#一个小技巧改进输出结果>#</a></h4><p>以上方法虽然已经足够实现功能，然而美中不足的地方在于，直接echo ping输出的内容又多又杂，可读性比较差，我们只关心IP地址和是否宕机的话，可以对pīng.sh如下改进:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln> 1</span><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=ln> 2</span><span class=cl>
+</span></span><span class=line><span class=ln> 3</span><span class=cl><span class=c1># from 192.168.1.1 to 192.168.1.254</span>
+</span></span><span class=line><span class=ln> 4</span><span class=cl>
+</span></span><span class=line><span class=ln> 5</span><span class=cl><span class=k>for</span> i in <span class=o>{</span>1..254<span class=o>}</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=ln> 6</span><span class=cl>    
+</span></span><span class=line><span class=ln> 7</span><span class=cl>    <span class=c1># 现在，我们将无用的信息重定向进/dev/null当中</span>
+</span></span><span class=line><span class=ln> 8</span><span class=cl>    
+</span></span><span class=line><span class=ln> 9</span><span class=cl>    ping -c <span class=m>2</span> -i 0.5 192.168.1.<span class=nv>$i</span> <span class=p>&amp;</span>&gt; /dev/null
+</span></span><span class=line><span class=ln>10</span><span class=cl>    <span class=k>if</span> <span class=o>[</span> <span class=nv>$?</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=ln>11</span><span class=cl>	<span class=nb>echo</span> <span class=s2>&#34;192.168.1.</span><span class=nv>$i</span><span class=s2> is up&#34;</span>
+</span></span><span class=line><span class=ln>12</span><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=ln>13</span><span class=cl>	<span class=nb>echo</span> <span class=s2>&#34;192.168.1.</span><span class=nv>$i</span><span class=s2> is down&#34;</span>
+</span></span><span class=line><span class=ln>14</span><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=ln>15</span><span class=cl><span class=k>done</span>
+</span></span></code></pre></div><p>再次运行，我们得到了清爽的结果：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-zsh data-lang=zsh><span class=line><span class=ln> 1</span><span class=cl>neil@192 00_shell % ./ping.sh
+</span></span><span class=line><span class=ln> 2</span><span class=cl>192.168.1.1 is up
+</span></span><span class=line><span class=ln> 3</span><span class=cl>192.168.1.2 is down
+</span></span><span class=line><span class=ln> 4</span><span class=cl>192.168.1.3 is up
+</span></span><span class=line><span class=ln> 5</span><span class=cl>192.168.1.4 is down
+</span></span><span class=line><span class=ln> 6</span><span class=cl>192.168.1.5 is down
+</span></span><span class=line><span class=ln> 7</span><span class=cl>192.168.1.6 is up
+</span></span><span class=line><span class=ln> 8</span><span class=cl>192.168.1.7 is up
+</span></span><span class=line><span class=ln> 9</span><span class=cl>192.168.1.8 is down
+</span></span><span class=line><span class=ln>10</span><span class=cl>192.168.1.9 is down
+</span></span><span class=line><span class=ln>11</span><span class=cl>192.168.1.10 is down
+</span></span><span class=line><span class=ln>12</span><span class=cl>192.168.1.11 is down
+</span></span></code></pre></div><h4 id=补充知识>补充知识<a hidden class=anchor aria-hidden=true href=#补充知识>#</a></h4><table><thead><tr><th>IP地址</th><th>用途</th><th>说明</th></tr></thead><tbody><tr><td><strong>192.168.1.0</strong></td><td><strong>网络地址</strong></td><td>标识整个网络，设备不能用</td></tr><tr><td><strong>192.168.1.1</strong></td><td>通常为<strong>网关</strong></td><td>路由器/网关地址</td></tr><tr><td><strong>192.168.1.2 - 192.168.1.254</strong></td><td><strong>可用主机地址</strong></td><td>设备可以使用的IP</td></tr><tr><td><strong>192.168.1.255</strong></td><td><strong>广播地址</strong></td><td>全网广播，设备不能用</td></tr></tbody></table></div><footer class=post-footer><ul class=post-tags><li><a href=https://NeilYuan0404.github.io/zh/tags/shell/>Shell</a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/linux/>Linux</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://NeilYuan0404.github.io/zh/>Home</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

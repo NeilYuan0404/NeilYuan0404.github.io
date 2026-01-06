@@ -1,27 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>代理服务器 on Home</title>
-    <link>http://localhost:1313/zh/tags/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/</link>
-    <description>Recent content in 代理服务器 on Home</description>
-    <generator>Hugo -- 0.153.4</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sun, 09 Nov 2025 12:27:31 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/zh/tags/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>CSAPP：ProxyLab讲解与实现</title>
-      <link>http://localhost:1313/zh/blog/proxylab/</link>
-      <pubDate>Sun, 09 Nov 2025 12:27:31 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/proxylab/</guid>
-      <description>&lt;p&gt;&lt;em&gt;纸上得来终觉浅，绝知此事要躬行。&lt;/em&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>代理服务器 on Home</title><link>https://NeilYuan0404.github.io/zh/tags/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/</link><description>Recent content in 代理服务器 on Home</description><generator>Hugo -- 0.153.4</generator><language>zh-cn</language><lastBuildDate>Sun, 09 Nov 2025 12:27:31 +0800</lastBuildDate><atom:link href="https://NeilYuan0404.github.io/zh/tags/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>CSAPP：ProxyLab讲解与实现</title><link>https://NeilYuan0404.github.io/zh/blog/proxylab/</link><pubDate>Sun, 09 Nov 2025 12:27:31 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/proxylab/</guid><description>&lt;p&gt;&lt;em&gt;纸上得来终觉浅，绝知此事要躬行。&lt;/em&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3 id=&#34;内容介绍&#34;&gt;内容介绍&lt;/h3&gt;
+&lt;h3 id="内容介绍"&gt;内容介绍&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;一、（已更）从CS:APP ProxyLab这辆玩具车出发  &lt;a href=&#34;https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c&#34;&gt;Github - Naive-Proxy的实现&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;一、（已更）从CS:APP ProxyLab这辆玩具车出发 &lt;a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c"&gt;Github - Naive-Proxy的实现&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;二、（已更）尝试改进玩具车Proxy：线程与I/O复用 &lt;a href=&#34;https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/mature-proxy.c&#34;&gt;Github - Mature-Proxy的实现&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+&lt;p&gt;二、（已更）尝试改进玩具车Proxy：线程与I/O复用 &lt;a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/mature-proxy.c"&gt;Github - Mature-Proxy的实现&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

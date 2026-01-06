@@ -1,34 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Linux on Home</title>
-    <link>http://localhost:1313/zh/tags/linux/</link>
-    <description>Recent content in Linux on Home</description>
-    <generator>Hugo -- 0.153.4</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Fri, 14 Nov 2025 22:48:24 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/zh/tags/linux/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>使用shell查看当前局域网宕机的IP地址</title>
-      <link>http://localhost:1313/zh/blog/check_ip_shell/</link>
-      <pubDate>Fri, 14 Nov 2025 22:48:24 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/check_ip_shell/</guid>
-      <description>&lt;h4 id=&#34;测试环境-macos-12&#34;&gt;测试环境 macOS 12&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;neil@192 ~ % sysctl -n hw.model
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;10Mac14,2
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;neil@192 ~ % sw_vers
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;ProductName: macOS
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;ProductVersion: 12.7.4
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;BuildVersion: 21H1123
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;neil@192 ~ %
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;用到的命令&#34;&gt;用到的命令：&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Linux on Home</title><link>https://NeilYuan0404.github.io/zh/tags/linux/</link><description>Recent content in Linux on Home</description><generator>Hugo -- 0.153.4</generator><language>zh-cn</language><lastBuildDate>Fri, 14 Nov 2025 22:48:24 +0800</lastBuildDate><atom:link href="https://NeilYuan0404.github.io/zh/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>使用shell查看当前局域网宕机的IP地址</title><link>https://NeilYuan0404.github.io/zh/blog/check_ip_shell/</link><pubDate>Fri, 14 Nov 2025 22:48:24 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/check_ip_shell/</guid><description>&lt;h4 id="测试环境-macos-12"&gt;测试环境 macOS 12&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;1&lt;/span&gt;&lt;span class="cl"&gt;neil@192 ~ % sysctl -n hw.model
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;2&lt;/span&gt;&lt;span class="cl"&gt;10Mac14,2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;3&lt;/span&gt;&lt;span class="cl"&gt;neil@192 ~ % sw_vers
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;4&lt;/span&gt;&lt;span class="cl"&gt;ProductName: macOS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;5&lt;/span&gt;&lt;span class="cl"&gt;ProductVersion: 12.7.4
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;6&lt;/span&gt;&lt;span class="cl"&gt;BuildVersion: 21H1123
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;7&lt;/span&gt;&lt;span class="cl"&gt;neil@192 ~ %
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="用到的命令"&gt;用到的命令：&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。&lt;/li&gt;
 &lt;li&gt;ping : 我们使用ping来尝试连接，即测试是否宕机。&lt;/li&gt;
 &lt;li&gt;shell中的for循环&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;步骤&#34;&gt;步骤：&lt;/h4&gt;
-&lt;p&gt;1.使用ifconfig查看自己的局域网网段&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+&lt;h4 id="步骤"&gt;步骤：&lt;/h4&gt;
+&lt;p&gt;1.使用ifconfig查看自己的局域网网段&lt;/p&gt;</description></item></channel></rss>

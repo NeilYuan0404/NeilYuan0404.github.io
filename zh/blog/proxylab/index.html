@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh" dir="auto" data-theme="auto">
-
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
-<title>CSAPP：ProxyLab讲解与实现 | Home</title>
-<meta name="keywords" content="CSAPP, 代理服务器, 网络编程, C语言">
-<meta name="description" content="纸上得来终觉浅，绝知此事要躬行。
+<!doctype html><html lang=zh dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>CSAPP：ProxyLab讲解与实现 | Home</title><meta name=keywords content="CSAPP,代理服务器,网络编程,C语言"><meta name=description content="纸上得来终觉浅，绝知此事要躬行。
 
 内容介绍
 
@@ -15,414 +6,50 @@
 一、（已更）从CS:APP ProxyLab这辆玩具车出发  Github - Naive-Proxy的实现
 
 
-二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现">
-<meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/zh/blog/proxylab/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="zh" href="http://localhost:1313/zh/blog/proxylab/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
+二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现"><meta name=author content><link rel=canonical href=https://NeilYuan0404.github.io/zh/blog/proxylab/><link crossorigin=anonymous href=/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css integrity="sha256-NDzEgLn/yPBMy+XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as=style><link rel=icon href=https://NeilYuan0404.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://NeilYuan0404.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://NeilYuan0404.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://NeilYuan0404.github.io/apple-touch-icon.png><link rel=mask-icon href=https://NeilYuan0404.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=zh href=https://NeilYuan0404.github.io/zh/blog/proxylab/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://NeilYuan0404.github.io/zh/blog/proxylab/"><meta property="og:site_name" content="Home"><meta property="og:title" content="CSAPP：ProxyLab讲解与实现"><meta property="og:description" content="纸上得来终觉浅，绝知此事要躬行。
+内容介绍 一、（已更）从CS:APP ProxyLab这辆玩具车出发 Github - Naive-Proxy的实现
+二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现"><meta property="og:locale" content="zh-cn"><meta property="og:type" content="article"><meta property="article:section" content="blog"><meta property="article:published_time" content="2025-11-09T12:27:31+08:00"><meta property="article:modified_time" content="2025-11-09T12:27:31+08:00"><meta property="article:tag" content="CSAPP"><meta property="article:tag" content="代理服务器"><meta property="article:tag" content="网络编程"><meta property="article:tag" content="C语言"><meta name=twitter:card content="summary"><meta name=twitter:title content="CSAPP：ProxyLab讲解与实现"><meta name=twitter:description content="纸上得来终觉浅，绝知此事要躬行。
 
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-                color-scheme: dark;
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .toc {
-                background: var(--entry);
-            }
-        }
-
-        @media (prefers-color-scheme: light) {
-            .list::-webkit-scrollbar-thumb {
-                border-color: var(--code-bg);
-            }
-        }
-
-    </style>
-</noscript>
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else if (localStorage.getItem("pref-theme") === "light") {
-       document.querySelector("html").dataset.theme = 'light';
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else {
-        document.querySelector("html").dataset.theme = 'light';
-    }
-
-</script>
-</head>
-<body id="top">
-    <header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="http://localhost:1313/zh/" accesskey="h" title="Home (Alt + H)">Home</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-                    <ul class="lang-switch"><li>|</li>
-                        <li>
-                            <a href="http://localhost:1313/en/" title="English"
-                                aria-label="English">En</a>
-                        </li>
-                    </ul>
-            </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="http://localhost:1313/zh/" title="主页">
-                    <span>主页</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/zh/tags/" title="标签">
-                    <span>标签</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/zh/archives/" title="归档">
-                    <span>归档</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/zh/about/" title="关于">
-                    <span>关于</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main">
-
-<article class="post-single">
-  <header class="post-header">
-    
-    <h1 class="post-title entry-hint-parent">
-      CSAPP：ProxyLab讲解与实现
-    </h1>
-    <div class="post-meta"><span title='2025-11-09 12:27:31 +0800 CST'>2025年11月9日</span>
-
-</div>
-  </header> 
-  <div class="post-content"><p><em>纸上得来终觉浅，绝知此事要躬行。</em></p>
-<hr>
-<h3 id="内容介绍">内容介绍<a hidden class="anchor" aria-hidden="true" href="#内容介绍">#</a></h3>
-<ul>
-<li>
-<p>一、（已更）从CS:APP ProxyLab这辆玩具车出发  <a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c">Github - Naive-Proxy的实现</a></p>
-</li>
-<li>
-<p>二、（已更）尝试改进玩具车Proxy：线程与I/O复用 <a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/mature-proxy.c">Github - Mature-Proxy的实现</a></p>
-</li>
-</ul>
-<p>本篇内容适合了解一点点C/C++，学过CS:APP的朋友们，亦或者有大二程度的计算机网络基础，想要了解更多实用的网络编程的朋友们。
-本文是一个庞大知识体系的引子，为了可读性，我不得不牺牲很大一部分的细节，但是别担心，对于那些感兴趣的朋友，我会在适当的地方插入超链接。</p>
-<p>也许你只是认真学习了本科所教的计算机网络这门课，但是觉得从第一章开始就被各种概念填满的这门课无外乎是计算机专业中的一门&quot;文科&quot;，记一记，背一背，在考试顺利通过之后，并没能认识到这门课到底有何实用意义。亦或者你是刚学完CS:APP的网络编程一章并且实现了ProxyLab之后，总觉意犹未尽，因为短短几百行的ProxyLab实在是有一点太玩具，其功能也无法超乎教学需求之外。对于前者，建议先尝试花一些时间好好看看第一节和第二节的内容。</p>
-<hr>
-<h2 id="一从csapp-proxylab这辆玩具车出发">一、从CS:APP ProxyLab这辆玩具车出发<a hidden class="anchor" aria-hidden="true" href="#一从csapp-proxylab这辆玩具车出发">#</a></h2>
-<h3 id="11-互联网">1.1 互联网<a hidden class="anchor" aria-hidden="true" href="#11-互联网">#</a></h3>
-<p>互联网是一个极其庞大且复杂的通信网络系统，也是人类最伟大的工程学奇迹之一。到底有多少人使用互联网？到底有多少台设备相互连接？我相信，无论多少次列举这个至今仍在迅速增长的数字，都会让人深深地感受到不可思议：</p>
-<ul>
-<li>
-<p><a href="https://en.wikipedia.org/wiki/List_of_countries_by_number_of_Internet_users">互联网已有超过<em>53亿</em>用户,占世界总人口的百分之67</a></p>
-</li>
-<li>
-<p><a href="https://cloud.tencent.com/developer/news/483642"><em>43亿</em>IPv4地址耗尽时刻</a></p>
-</li>
-</ul>
-<p>如果说实现如此规模庞大的复杂系统之间端到端的通信，只需要掌握<em>几十个</em>简单的函数，你是不是会相信这个世界也存在魔法？</p>
-<p>计算机世界的魔法之一，就是<strong>封装</strong></p>
-<p>问：考虑主机A如何将数据传送到主机B：</p>
-<ol>
-<li>应用层：把数据打包（HTTP/FTP等）</li>
-<li>传输层：加上端口号（TCP/UDP）</li>
-<li>网络层：加上IP地址，选择路径</li>
-<li>链路层：加上MAC地址，变成帧</li>
-<li>物理层：变成电信号/光信号发送</li>
-</ol>
-<p>A → 交换机 → 路由器 → 更多路由器 → 交换机 → B</p>
-<p>在这个过程中数据被层层<strong>封装</strong>，经过路由交换，最终解包送达。</p>
-<p>如果内核会说话，那么以上将会是他给出的答案，这是从计算机网络协议栈的视角来看。从一个程序员的视角，神奇的内核为我们提供了网络编程所需要的几十条极其简单的函数调用，我们将通过回顾CSAPP的ProxyLab，来帮助你理解所需要知道最基本的实用网络编程知识。</p>
-<h3 id="12-网络编程基础">1.2 网络编程基础<a hidden class="anchor" aria-hidden="true" href="#12-网络编程基础">#</a></h3>
-<p>当神奇内核和封装魔法为我们屏蔽掉了实际网络中的复杂度，主机A与主机B之间的通信就变成了一种端到端问答对话，高度概括来说，我们引入<strong>客户端-服务器模型</strong></p>
-<p>这种端到端的对话需要一个基本的信息，就是(客户端IP地址：端口, 服务器IP地址：端口)，由于结构上将客户端的信息和服务器的信息套接在一起，所以被称为<strong>套接字</strong>(socket)。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="ln"> 1</span><span class="cl">    <span class="k">struct</span> <span class="n">sockaddr_in</span>  <span class="p">{</span>
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl">        <span class="kt">uint16_t</span>        <span class="n">sin_family</span><span class="p">;</span>  <span class="cm">/* 协议族 (AF_INET) */</span>
-</span></span><span class="line"><span class="ln"> 3</span><span class="cl">        <span class="kt">uint16_t</span>        <span class="n">sin_port</span><span class="p">;</span>    <span class="cm">/* 16位端口信息(大端法表示) */</span>
-</span></span><span class="line"><span class="ln"> 4</span><span class="cl">        <span class="k">struct</span> <span class="n">in_addr</span>  <span class="n">sin_addr</span><span class="p">;</span>    <span class="cm">/* 32位IP地址信息(大端法表示) */</span>
-</span></span><span class="line"><span class="ln"> 5</span><span class="cl">        <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">sin_zero</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span> <span class="cm">/* struct sockaddr大小*/</span>
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="p">};</span>
-</span></span><span class="line"><span class="ln"> 7</span><span class="cl">
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="cm">/* 通用套接字地址结构 (用于connect函数, bind函数, 和accept函数) */</span>
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="k">struct</span> <span class="n">sockaddr</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">10</span><span class="cl">        <span class="kt">uint16_t</span>  <span class="n">sa_family</span><span class="p">;</span>    <span class="cm">/* 协议族 */</span>
-</span></span><span class="line"><span class="ln">11</span><span class="cl">        <span class="kt">char</span>      <span class="n">sa_data</span><span class="p">[</span><span class="mi">14</span><span class="p">];</span>  <span class="cm">/* 地址数据 */</span>
-</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="p">};</span>		
-</span></span></code></pre></div><p>图1.1 socket套接字地址结构</p>
-<p>有些奇怪的地方，不妨可以问问<a href="https://chat.deepseek.com/">Deepseek</a>：</p>
-<ul>
-<li>
-<p>为什么明明可以用<code>uint32_t</code>直接表示IP地址，但是却使用<code>struct in_addr</code>这种东西？</p>
-</li>
-<li>
-<p>计算机系统中明明通行小端法表示字节顺序，但是套接字当中却统一使用大端法？</p>
-</li>
-<li>
-<p>为什么定义了<code>struct sockaddr_in</code> 还需要 <code>struct sockaddr</code>?</p>
-</li>
-</ul>
-<p>我们将ProxyLab作为基本套接字网络应用的引子，边做边学。
-什么是Proxy？&mdash;-Proxy是代理服务器的名称，试比较我们之前提到的客户端-服务器模型：</p>
-<p>真实客户端 → Proxy → 真实服务器</p>
-<p>可以看到，Proxy的定位就是在客户端与服务器之间充当中间人，之所以要强调真实客户端以及真实服务器，是因为<strong>Proxy对客户端而言是虚拟服务器，而对于服务器而言，是虚拟客户端。</strong>，所以，ProxyLab其实是<strong>两重的</strong>服务器客户端模型。所以，其实我们只需要了解那个最基本的<strong>客户端-服务器模型具体如何工作</strong>，就能够理解ProxyLab了，为此，我们需要了解一些<strong>套接字接口函数</strong>，还有一个概念：*<em>描述符</em>：网络编程中的描述符就是一个整数&quot;门票号&quot;，它是操作系统用来唯一标识和管理网络连接（如Socket）的依据，应用程序通过它来操作对应的网络连接。</p>
-<p><strong>套接字接口函数</strong></p>
-<ul>
-<li><code>socket</code>函数：客户端或者服务器都可调用，返回一个非负的<strong>socket套接字描述符</strong>，创建起通信双方的一个<strong>端点</strong>，默认认为是客户端调用的，并理解为<strong>主动描述符</strong></li>
-</ul>
-<p>客户端用以连接服务器的函数：</p>
-<ul>
-<li><code>connect</code>函数：调用时阻塞，直到建立起连接或者返回错误，如果成功，则将通过<code>socket</code>函数创建的描述符变为<strong>已连接的客户端描述符</strong>clientfd，建议使用<code>getaddrinfo</code>函数为它提供参数</li>
-</ul>
-<p>服务器用于同客户端建立连接的函数：</p>
-<ul>
-<li>
-<p><code>bind</code>函数：联系起socket_addr(服务器套接字地址)与socket套接字描述符，成功则返回0，否则-1</p>
-</li>
-<li>
-<p><code>listen</code>函数：若服务器调用此函数，则将通过<code>socket</code>函数创建的描述符从默认的主动描述符转化为<strong>监听描述符</strong>listenfd，同样建议使用<code>getaddrinfo</code>来提供参数</p>
-</li>
-<li>
-<p><code>accept</code>函数：等待来自客户端的连接请求到达<strong>监听描述符</strong>listenfd，到达后，在socket_addr当中填写客户端的套接字地址，并返回<strong>已连接描述符</strong>connfd</p>
-</li>
-</ul>
-<p>有了这些基本的工具，我们就可以建立起一个Naive版本的Proxy。具体代码就不在这贴了，附上连接，有比较详细的注释。 <a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c">Github - Naive-Proxy的实现</a></p>
-<h2 id="二尝试改进naive-proxy线程与io复用">二、尝试改进Naive-proxy：线程与I/O复用<a hidden class="anchor" aria-hidden="true" href="#二尝试改进naive-proxy线程与io复用">#</a></h2>
-<p>为什么将我们上面的proxy取名为naive？考虑如下两个问题：</p>
-<ul>
-<li>
-<p>问题一、多个客户端<strong>并发</strong>请求服务器正在监听的某一端口，naive-proxy会如何？</p>
-</li>
-<li>
-<p>问题二、这些并发请求中，若处理某一个客户端的请求需要分配<strong>高性能</strong>时，naive-proxy会如何？</p>
-</li>
-</ul>
-<p>我希望用一个现实中的例子来模拟：假设客户端连接是等待打饭的学生，我们的proxy或webserver是饭堂工作人员：</p>
-<p>首先，让我们来考虑问题一，naive-proxy的天真之处之一就在于它假设客户端的请求将会十分有序，就像在食堂捧着餐盘排队的学生们。但是，事实不是如此，高并发才是proxy或者webserver需要面对的常态，换句话说，当学生们不再彬彬有礼，客客气气，而是和三天没吃饭的饿死鬼一样蜂拥而上。我们可怜的饭堂阿姨也只能一边给手伸得最长、盘子递得最前的饿死鬼拍一勺饭，一边大声却无济于事地喝斥排队。</p>
-<p>然后，我们考虑问题二：naive-proxy的天真之处之二在于它假设客户端的请求一定是自己hold得住的、可以在合理时间内服务完毕的，假设这回，它遇到了一个请求资源十分大的连接请求：比方食堂阿姨遇到了一个奇怪的同学，他身材黝黑矮小，却拖着一个几乎和他体型一样大的麻袋，不问不知道，原来里面装着全班人的餐盘！这回不只是阿姨傻眼了，蜂拥而上的同学们也在旁边傻眼了&mdash;-只能眼巴巴看着阿姨先给这位同学的全班打饭。</p>
-<p>当然了，对于食堂打饭的问题，如果我们有足够多的食堂窗口，并且聘请足够多的食堂阿姨，然后请思政老师好好把关学生素质，让他们自觉遵守校规，不是什么难事。但是计算机世界不是这样运作的！</p>
-<p>我们为proxy提供的解决方案如下：</p>
-<ul>
-<li>
-<p>针对问题一：使用I/O复用技术，关键在于<code>select</code>函数来监控多个描述符的状态，这样我们就直到应该处理哪些个连接请求</p>
-</li>
-<li>
-<p>针对问题二：使用线程池技术，关键在于不同请求类型都可创建线程占用一个CPU执行</p>
-</li>
-</ul>
-<h4 id="select如何使用">select如何使用<a hidden class="anchor" aria-hidden="true" href="#select如何使用">#</a></h4>
-<p><code>select</code>是一个用于监视多个socket事件的系统调用，其所处理的数据结构是描述符集合<code>fd_set</code>, 并且修改<code>fd_set</code>中描述符的状态变化(它所监控的状态有三种&mdash;-可读、可写、异常)。</p>
-<p><code>fd_set</code>是什么？</p>
-<p>本质上，fd_set 是一个固定大小的位数组（bit array）。每一个位（bit）代表一个文件描述符。</p>
-<ul>
-<li>
-<p>如果某个位被设置为 1，表示对应的文件描述符正在被监视。</p>
-</li>
-<li>
-<p>如果为 0，则表示不关心该文件描述符。</p>
-</li>
-</ul>
-<p>例如，在一个 1024 位的 fd_set 中：</p>
-<ul>
-<li>
-<p>位 0 (第1位) 代表文件描述符 0 (标准输入)</p>
-</li>
-<li>
-<p>位 5 (第6位) 代表文件描述符 5，以此类推&hellip;</p>
-</li>
-</ul>
-<p>在 Linux 中，fd_set 的大小通常是固定的，由常量 FD_SETSIZE 定义。 这个值通常是 1024。这意味着 select 能同时监视的文件描述符数量上限是 1024。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/select.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="ln">2</span><span class="cl">
-</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="kt">int</span> <span class="nf">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">readfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span><span class="n">writefds</span><span class="p">,</span>
-</span></span><span class="line"><span class="ln">4</span><span class="cl">           <span class="n">fd_set</span> <span class="o">*</span><span class="n">exceptfds</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span> <span class="c1">//timeout是可选项
-</span></span></span></code></pre></div><p>图2.1 select函数原型</p>
-<p>通过一些宏，我们可以操作描述符集合:</p>
-<ul>
-<li>
-<p>FD_ZERO(&amp;set): 清空集合</p>
-</li>
-<li>
-<p>FD_SET(fd, &amp;set): 添加文件描述符到集合</p>
-</li>
-<li>
-<p>FD_CLR(fd, &amp;set): 从集合中移除文件描述符</p>
-</li>
-<li>
-<p>FD_ISSET(fd, &amp;set): 检查文件描述符是否在集合中</p>
-</li>
-</ul>
-<h4 id="线程的简单介绍">线程的简单介绍<a hidden class="anchor" aria-hidden="true" href="#线程的简单介绍">#</a></h4>
-<p>线程是一种运行在进程上下文当中的逻辑流，也就是说，不同的线程只不过是同一进程之中的切换，共享这个进程当中的整个<strong>虚拟地址空间的所有内容</strong>。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl">	<span class="kt">pthread_t</span> <span class="n">tid</span><span class="p">;</span> <span class="c1">//线程号tid
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl">	<span class="nf">Pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tid</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="kr">thread</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span> <span class="c1">//线程创建
-</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl">	<span class="nf">Pthread_join</span><span class="p">(</span><span class="n">tid</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span> <span class="c1">//调用线程
-</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl">	<span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="ln"> 7</span><span class="cl">
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1">//线程所执行的内容
-</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="nf">thread</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">vargp</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">10</span><span class="cl">	<span class="nf">printf</span><span class="p">(</span><span class="s">&#34;hello world</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="ln">11</span><span class="cl">	<span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>图2.2 线程版本的hello world</p>
-<p>mature-proxy 当中所涉及的线程代码十分简单，不过值得多嘴一提：</p>
-<ul>
-<li>
-<p><code>Pthread_join</code>调用的时候，会发生阻塞，直到线程tid的内容执行完毕，然后返回一个指向通用（void）指针，在hello程序当中，这个指针指向的位置是NULL。然后，线程所使用的资源被回收。</p>
-</li>
-<li>
-<p>线程是<strong>可结合</strong>的或者<strong>分离的</strong>，一个可结合的线程能够被其他线程所回收和杀死，然而，一个分离的线程所占用的资源只能在其终止时被系统自然释放。我们可以通过<code>int pthread_detach(pthread_t tid)</code>函数来创建一个分离的线程，如果我们需要分离这个线程他自己，可以通过<code>pthread_self</code>函数来获取自己的tid。</p>
-</li>
-</ul>
-<p>在mature-proxy当中，我们用线程改进naive-proxy的思路是创建一些线程池，也就是说，为了避免需要使用线程的时候我们还需要临时创建这种情况，我们提前创建了合理数目的线程，并且在需要使用的时候直接就可以使用。这种方法被称为线程池。</p>
-<p>有兴趣了解线程池技术的朋友，可以参考下我写的另一篇<a href="/content/blog/threadpool.md">有关线程池的文章</a>。</p>
+内容介绍
 
 
-  </div>
+一、（已更）从CS:APP ProxyLab这辆玩具车出发  Github - Naive-Proxy的实现
 
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="http://localhost:1313/zh/tags/csapp/">CSAPP</a></li>
-      <li><a href="http://localhost:1313/zh/tags/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/">代理服务器</a></li>
-      <li><a href="http://localhost:1313/zh/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></li>
-      <li><a href="http://localhost:1313/zh/tags/c%E8%AF%AD%E8%A8%80/">C语言</a></li>
-    </ul>
-  </footer>
-</article>
-    </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/zh/">Home</a></span> · 
 
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu');
-    if (menu) {
-        
-        const scrollPosition = localStorage.getItem("menu-scroll-position");
-        if (scrollPosition) {
-            menu.scrollLeft = parseInt(scrollPosition, 10);
-        }
-        
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
-</body>
-
-</html>
+二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blogs","item":"https://NeilYuan0404.github.io/zh/blog/"},{"@type":"ListItem","position":2,"name":"CSAPP：ProxyLab讲解与实现","item":"https://NeilYuan0404.github.io/zh/blog/proxylab/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"CSAPP：ProxyLab讲解与实现","name":"CSAPP：ProxyLab讲解与实现","description":"纸上得来终觉浅，绝知此事要躬行。\n内容介绍 一、（已更）从CS:APP ProxyLab这辆玩具车出发 Github - Naive-Proxy的实现\n二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现\n","keywords":["CSAPP","代理服务器","网络编程","C语言"],"articleBody":"纸上得来终觉浅，绝知此事要躬行。\n内容介绍 一、（已更）从CS:APP ProxyLab这辆玩具车出发 Github - Naive-Proxy的实现\n二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现\n本篇内容适合了解一点点C/C++，学过CS:APP的朋友们，亦或者有大二程度的计算机网络基础，想要了解更多实用的网络编程的朋友们。 本文是一个庞大知识体系的引子，为了可读性，我不得不牺牲很大一部分的细节，但是别担心，对于那些感兴趣的朋友，我会在适当的地方插入超链接。\n也许你只是认真学习了本科所教的计算机网络这门课，但是觉得从第一章开始就被各种概念填满的这门课无外乎是计算机专业中的一门\"文科\"，记一记，背一背，在考试顺利通过之后，并没能认识到这门课到底有何实用意义。亦或者你是刚学完CS:APP的网络编程一章并且实现了ProxyLab之后，总觉意犹未尽，因为短短几百行的ProxyLab实在是有一点太玩具，其功能也无法超乎教学需求之外。对于前者，建议先尝试花一些时间好好看看第一节和第二节的内容。\n一、从CS:APP ProxyLab这辆玩具车出发 1.1 互联网 互联网是一个极其庞大且复杂的通信网络系统，也是人类最伟大的工程学奇迹之一。到底有多少人使用互联网？到底有多少台设备相互连接？我相信，无论多少次列举这个至今仍在迅速增长的数字，都会让人深深地感受到不可思议：\n互联网已有超过53亿用户,占世界总人口的百分之67\n43亿IPv4地址耗尽时刻\n如果说实现如此规模庞大的复杂系统之间端到端的通信，只需要掌握几十个简单的函数，你是不是会相信这个世界也存在魔法？\n计算机世界的魔法之一，就是封装\n问：考虑主机A如何将数据传送到主机B：\n应用层：把数据打包（HTTP/FTP等） 传输层：加上端口号（TCP/UDP） 网络层：加上IP地址，选择路径 链路层：加上MAC地址，变成帧 物理层：变成电信号/光信号发送 A → 交换机 → 路由器 → 更多路由器 → 交换机 → B\n在这个过程中数据被层层封装，经过路由交换，最终解包送达。\n如果内核会说话，那么以上将会是他给出的答案，这是从计算机网络协议栈的视角来看。从一个程序员的视角，神奇的内核为我们提供了网络编程所需要的几十条极其简单的函数调用，我们将通过回顾CSAPP的ProxyLab，来帮助你理解所需要知道最基本的实用网络编程知识。\n1.2 网络编程基础 当神奇内核和封装魔法为我们屏蔽掉了实际网络中的复杂度，主机A与主机B之间的通信就变成了一种端到端问答对话，高度概括来说，我们引入客户端-服务器模型\n这种端到端的对话需要一个基本的信息，就是(客户端IP地址：端口, 服务器IP地址：端口)，由于结构上将客户端的信息和服务器的信息套接在一起，所以被称为套接字(socket)。\n1 struct sockaddr_in { 2 uint16_t sin_family; /* 协议族 (AF_INET) */ 3 uint16_t sin_port; /* 16位端口信息(大端法表示) */ 4 struct in_addr sin_addr; /* 32位IP地址信息(大端法表示) */ 5 unsigned char sin_zero[8]; /* struct sockaddr大小*/ 6 }; 7 8 /* 通用套接字地址结构 (用于connect函数, bind函数, 和accept函数) */ 9 struct sockaddr { 10 uint16_t sa_family; /* 协议族 */ 11 char sa_data[14]; /* 地址数据 */ 12 };\t图1.1 socket套接字地址结构\n有些奇怪的地方，不妨可以问问Deepseek：\n为什么明明可以用uint32_t直接表示IP地址，但是却使用struct in_addr这种东西？\n计算机系统中明明通行小端法表示字节顺序，但是套接字当中却统一使用大端法？\n为什么定义了struct sockaddr_in 还需要 struct sockaddr?\n我们将ProxyLab作为基本套接字网络应用的引子，边做边学。 什么是Proxy？—-Proxy是代理服务器的名称，试比较我们之前提到的客户端-服务器模型：\n真实客户端 → Proxy → 真实服务器\n可以看到，Proxy的定位就是在客户端与服务器之间充当中间人，之所以要强调真实客户端以及真实服务器，是因为Proxy对客户端而言是虚拟服务器，而对于服务器而言，是虚拟客户端。，所以，ProxyLab其实是两重的服务器客户端模型。所以，其实我们只需要了解那个最基本的客户端-服务器模型具体如何工作，就能够理解ProxyLab了，为此，我们需要了解一些套接字接口函数，还有一个概念：*描述符：网络编程中的描述符就是一个整数\"门票号\"，它是操作系统用来唯一标识和管理网络连接（如Socket）的依据，应用程序通过它来操作对应的网络连接。\n套接字接口函数\nsocket函数：客户端或者服务器都可调用，返回一个非负的socket套接字描述符，创建起通信双方的一个端点，默认认为是客户端调用的，并理解为主动描述符 客户端用以连接服务器的函数：\nconnect函数：调用时阻塞，直到建立起连接或者返回错误，如果成功，则将通过socket函数创建的描述符变为已连接的客户端描述符clientfd，建议使用getaddrinfo函数为它提供参数 服务器用于同客户端建立连接的函数：\nbind函数：联系起socket_addr(服务器套接字地址)与socket套接字描述符，成功则返回0，否则-1\nlisten函数：若服务器调用此函数，则将通过socket函数创建的描述符从默认的主动描述符转化为监听描述符listenfd，同样建议使用getaddrinfo来提供参数\naccept函数：等待来自客户端的连接请求到达监听描述符listenfd，到达后，在socket_addr当中填写客户端的套接字地址，并返回已连接描述符connfd\n有了这些基本的工具，我们就可以建立起一个Naive版本的Proxy。具体代码就不在这贴了，附上连接，有比较详细的注释。 Github - Naive-Proxy的实现\n二、尝试改进Naive-proxy：线程与I/O复用 为什么将我们上面的proxy取名为naive？考虑如下两个问题：\n问题一、多个客户端并发请求服务器正在监听的某一端口，naive-proxy会如何？\n问题二、这些并发请求中，若处理某一个客户端的请求需要分配高性能时，naive-proxy会如何？\n我希望用一个现实中的例子来模拟：假设客户端连接是等待打饭的学生，我们的proxy或webserver是饭堂工作人员：\n首先，让我们来考虑问题一，naive-proxy的天真之处之一就在于它假设客户端的请求将会十分有序，就像在食堂捧着餐盘排队的学生们。但是，事实不是如此，高并发才是proxy或者webserver需要面对的常态，换句话说，当学生们不再彬彬有礼，客客气气，而是和三天没吃饭的饿死鬼一样蜂拥而上。我们可怜的饭堂阿姨也只能一边给手伸得最长、盘子递得最前的饿死鬼拍一勺饭，一边大声却无济于事地喝斥排队。\n然后，我们考虑问题二：naive-proxy的天真之处之二在于它假设客户端的请求一定是自己hold得住的、可以在合理时间内服务完毕的，假设这回，它遇到了一个请求资源十分大的连接请求：比方食堂阿姨遇到了一个奇怪的同学，他身材黝黑矮小，却拖着一个几乎和他体型一样大的麻袋，不问不知道，原来里面装着全班人的餐盘！这回不只是阿姨傻眼了，蜂拥而上的同学们也在旁边傻眼了—-只能眼巴巴看着阿姨先给这位同学的全班打饭。\n当然了，对于食堂打饭的问题，如果我们有足够多的食堂窗口，并且聘请足够多的食堂阿姨，然后请思政老师好好把关学生素质，让他们自觉遵守校规，不是什么难事。但是计算机世界不是这样运作的！\n我们为proxy提供的解决方案如下：\n针对问题一：使用I/O复用技术，关键在于select函数来监控多个描述符的状态，这样我们就直到应该处理哪些个连接请求\n针对问题二：使用线程池技术，关键在于不同请求类型都可创建线程占用一个CPU执行\nselect如何使用 select是一个用于监视多个socket事件的系统调用，其所处理的数据结构是描述符集合fd_set, 并且修改fd_set中描述符的状态变化(它所监控的状态有三种—-可读、可写、异常)。\nfd_set是什么？\n本质上，fd_set 是一个固定大小的位数组（bit array）。每一个位（bit）代表一个文件描述符。\n如果某个位被设置为 1，表示对应的文件描述符正在被监视。\n如果为 0，则表示不关心该文件描述符。\n例如，在一个 1024 位的 fd_set 中：\n位 0 (第1位) 代表文件描述符 0 (标准输入)\n位 5 (第6位) 代表文件描述符 5，以此类推…\n在 Linux 中，fd_set 的大小通常是固定的，由常量 FD_SETSIZE 定义。 这个值通常是 1024。这意味着 select 能同时监视的文件描述符数量上限是 1024。\n1#include 2 3int select(int nfds, fd_set *readfds, fd_set *writefds, 4 fd_set *exceptfds, struct timeval *timeout); //timeout是可选项 图2.1 select函数原型\n通过一些宏，我们可以操作描述符集合:\nFD_ZERO(\u0026set): 清空集合\nFD_SET(fd, \u0026set): 添加文件描述符到集合\nFD_CLR(fd, \u0026set): 从集合中移除文件描述符\nFD_ISSET(fd, \u0026set): 检查文件描述符是否在集合中\n线程的简单介绍 线程是一种运行在进程上下文当中的逻辑流，也就是说，不同的线程只不过是同一进程之中的切换，共享这个进程当中的整个虚拟地址空间的所有内容。\n1int main() { 2\tpthread_t tid; //线程号tid 3\tPthread_create(\u0026tid, NULL, thread, NULL); //线程创建 4\tPthread_join(tid, NULL); //调用线程 5\texit(0); 6} 7 8//线程所执行的内容 9void *thread(void *vargp) { 10\tprintf(\"hello world\\n\"); 11\treturn NULL; 12} 图2.2 线程版本的hello world\nmature-proxy 当中所涉及的线程代码十分简单，不过值得多嘴一提：\nPthread_join调用的时候，会发生阻塞，直到线程tid的内容执行完毕，然后返回一个指向通用（void）指针，在hello程序当中，这个指针指向的位置是NULL。然后，线程所使用的资源被回收。\n线程是可结合的或者分离的，一个可结合的线程能够被其他线程所回收和杀死，然而，一个分离的线程所占用的资源只能在其终止时被系统自然释放。我们可以通过int pthread_detach(pthread_t tid)函数来创建一个分离的线程，如果我们需要分离这个线程他自己，可以通过pthread_self函数来获取自己的tid。\n在mature-proxy当中，我们用线程改进naive-proxy的思路是创建一些线程池，也就是说，为了避免需要使用线程的时候我们还需要临时创建这种情况，我们提前创建了合理数目的线程，并且在需要使用的时候直接就可以使用。这种方法被称为线程池。\n有兴趣了解线程池技术的朋友，可以参考下我写的另一篇有关线程池的文章。\n","wordCount":"4135","inLanguage":"zh","datePublished":"2025-11-09T12:27:31+08:00","dateModified":"2025-11-09T12:27:31+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://NeilYuan0404.github.io/zh/blog/proxylab/"},"publisher":{"@type":"Organization","name":"Home","logo":{"@type":"ImageObject","url":"https://NeilYuan0404.github.io/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=nav><div class=logo><a href=https://NeilYuan0404.github.io/zh/ accesskey=h title="Home (Alt + H)">Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button><ul class=lang-switch><li>|</li><li><a href=https://NeilYuan0404.github.io/en/ title=English aria-label=English>En</a></li></ul></div></div><ul id=menu><li><a href=https://NeilYuan0404.github.io/zh/ title=主页><span>主页</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/ title=标签><span>标签</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/archives/ title=归档><span>归档</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/about/ title=关于><span>关于</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">CSAPP：ProxyLab讲解与实现</h1><div class=post-meta><span title='2025-11-09 12:27:31 +0800 CST'>2025年11月9日</span></div></header><div class=post-content><p><em>纸上得来终觉浅，绝知此事要躬行。</em></p><hr><h3 id=内容介绍>内容介绍<a hidden class=anchor aria-hidden=true href=#内容介绍>#</a></h3><ul><li><p>一、（已更）从CS:APP ProxyLab这辆玩具车出发 <a href=https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c>Github - Naive-Proxy的实现</a></p></li><li><p>二、（已更）尝试改进玩具车Proxy：线程与I/O复用 <a href=https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/mature-proxy.c>Github - Mature-Proxy的实现</a></p></li></ul><p>本篇内容适合了解一点点C/C++，学过CS:APP的朋友们，亦或者有大二程度的计算机网络基础，想要了解更多实用的网络编程的朋友们。
+本文是一个庞大知识体系的引子，为了可读性，我不得不牺牲很大一部分的细节，但是别担心，对于那些感兴趣的朋友，我会在适当的地方插入超链接。</p><p>也许你只是认真学习了本科所教的计算机网络这门课，但是觉得从第一章开始就被各种概念填满的这门课无外乎是计算机专业中的一门"文科"，记一记，背一背，在考试顺利通过之后，并没能认识到这门课到底有何实用意义。亦或者你是刚学完CS:APP的网络编程一章并且实现了ProxyLab之后，总觉意犹未尽，因为短短几百行的ProxyLab实在是有一点太玩具，其功能也无法超乎教学需求之外。对于前者，建议先尝试花一些时间好好看看第一节和第二节的内容。</p><hr><h2 id=一从csapp-proxylab这辆玩具车出发>一、从CS:APP ProxyLab这辆玩具车出发<a hidden class=anchor aria-hidden=true href=#一从csapp-proxylab这辆玩具车出发>#</a></h2><h3 id=11-互联网>1.1 互联网<a hidden class=anchor aria-hidden=true href=#11-互联网>#</a></h3><p>互联网是一个极其庞大且复杂的通信网络系统，也是人类最伟大的工程学奇迹之一。到底有多少人使用互联网？到底有多少台设备相互连接？我相信，无论多少次列举这个至今仍在迅速增长的数字，都会让人深深地感受到不可思议：</p><ul><li><p><a href=https://en.wikipedia.org/wiki/List_of_countries_by_number_of_Internet_users>互联网已有超过<em>53亿</em>用户,占世界总人口的百分之67</a></p></li><li><p><a href=https://cloud.tencent.com/developer/news/483642><em>43亿</em>IPv4地址耗尽时刻</a></p></li></ul><p>如果说实现如此规模庞大的复杂系统之间端到端的通信，只需要掌握<em>几十个</em>简单的函数，你是不是会相信这个世界也存在魔法？</p><p>计算机世界的魔法之一，就是<strong>封装</strong></p><p>问：考虑主机A如何将数据传送到主机B：</p><ol><li>应用层：把数据打包（HTTP/FTP等）</li><li>传输层：加上端口号（TCP/UDP）</li><li>网络层：加上IP地址，选择路径</li><li>链路层：加上MAC地址，变成帧</li><li>物理层：变成电信号/光信号发送</li></ol><p>A → 交换机 → 路由器 → 更多路由器 → 交换机 → B</p><p>在这个过程中数据被层层<strong>封装</strong>，经过路由交换，最终解包送达。</p><p>如果内核会说话，那么以上将会是他给出的答案，这是从计算机网络协议栈的视角来看。从一个程序员的视角，神奇的内核为我们提供了网络编程所需要的几十条极其简单的函数调用，我们将通过回顾CSAPP的ProxyLab，来帮助你理解所需要知道最基本的实用网络编程知识。</p><h3 id=12-网络编程基础>1.2 网络编程基础<a hidden class=anchor aria-hidden=true href=#12-网络编程基础>#</a></h3><p>当神奇内核和封装魔法为我们屏蔽掉了实际网络中的复杂度，主机A与主机B之间的通信就变成了一种端到端问答对话，高度概括来说，我们引入<strong>客户端-服务器模型</strong></p><p>这种端到端的对话需要一个基本的信息，就是(客户端IP地址：端口, 服务器IP地址：端口)，由于结构上将客户端的信息和服务器的信息套接在一起，所以被称为<strong>套接字</strong>(socket)。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C><span class=line><span class=ln> 1</span><span class=cl>    <span class=k>struct</span> <span class=n>sockaddr_in</span>  <span class=p>{</span>
+</span></span><span class=line><span class=ln> 2</span><span class=cl>        <span class=kt>uint16_t</span>        <span class=n>sin_family</span><span class=p>;</span>  <span class=cm>/* 协议族 (AF_INET) */</span>
+</span></span><span class=line><span class=ln> 3</span><span class=cl>        <span class=kt>uint16_t</span>        <span class=n>sin_port</span><span class=p>;</span>    <span class=cm>/* 16位端口信息(大端法表示) */</span>
+</span></span><span class=line><span class=ln> 4</span><span class=cl>        <span class=k>struct</span> <span class=n>in_addr</span>  <span class=n>sin_addr</span><span class=p>;</span>    <span class=cm>/* 32位IP地址信息(大端法表示) */</span>
+</span></span><span class=line><span class=ln> 5</span><span class=cl>        <span class=kt>unsigned</span> <span class=kt>char</span>   <span class=n>sin_zero</span><span class=p>[</span><span class=mi>8</span><span class=p>];</span> <span class=cm>/* struct sockaddr大小*/</span>
+</span></span><span class=line><span class=ln> 6</span><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=ln> 7</span><span class=cl>
+</span></span><span class=line><span class=ln> 8</span><span class=cl>    <span class=cm>/* 通用套接字地址结构 (用于connect函数, bind函数, 和accept函数) */</span>
+</span></span><span class=line><span class=ln> 9</span><span class=cl>    <span class=k>struct</span> <span class=n>sockaddr</span> <span class=p>{</span>
+</span></span><span class=line><span class=ln>10</span><span class=cl>        <span class=kt>uint16_t</span>  <span class=n>sa_family</span><span class=p>;</span>    <span class=cm>/* 协议族 */</span>
+</span></span><span class=line><span class=ln>11</span><span class=cl>        <span class=kt>char</span>      <span class=n>sa_data</span><span class=p>[</span><span class=mi>14</span><span class=p>];</span>  <span class=cm>/* 地址数据 */</span>
+</span></span><span class=line><span class=ln>12</span><span class=cl>    <span class=p>};</span>		
+</span></span></code></pre></div><p>图1.1 socket套接字地址结构</p><p>有些奇怪的地方，不妨可以问问<a href=https://chat.deepseek.com/>Deepseek</a>：</p><ul><li><p>为什么明明可以用<code>uint32_t</code>直接表示IP地址，但是却使用<code>struct in_addr</code>这种东西？</p></li><li><p>计算机系统中明明通行小端法表示字节顺序，但是套接字当中却统一使用大端法？</p></li><li><p>为什么定义了<code>struct sockaddr_in</code> 还需要 <code>struct sockaddr</code>?</p></li></ul><p>我们将ProxyLab作为基本套接字网络应用的引子，边做边学。
+什么是Proxy？&mdash;-Proxy是代理服务器的名称，试比较我们之前提到的客户端-服务器模型：</p><p>真实客户端 → Proxy → 真实服务器</p><p>可以看到，Proxy的定位就是在客户端与服务器之间充当中间人，之所以要强调真实客户端以及真实服务器，是因为<strong>Proxy对客户端而言是虚拟服务器，而对于服务器而言，是虚拟客户端。</strong>，所以，ProxyLab其实是<strong>两重的</strong>服务器客户端模型。所以，其实我们只需要了解那个最基本的<strong>客户端-服务器模型具体如何工作</strong>，就能够理解ProxyLab了，为此，我们需要了解一些<strong>套接字接口函数</strong>，还有一个概念：*<em>描述符</em>：网络编程中的描述符就是一个整数"门票号"，它是操作系统用来唯一标识和管理网络连接（如Socket）的依据，应用程序通过它来操作对应的网络连接。</p><p><strong>套接字接口函数</strong></p><ul><li><code>socket</code>函数：客户端或者服务器都可调用，返回一个非负的<strong>socket套接字描述符</strong>，创建起通信双方的一个<strong>端点</strong>，默认认为是客户端调用的，并理解为<strong>主动描述符</strong></li></ul><p>客户端用以连接服务器的函数：</p><ul><li><code>connect</code>函数：调用时阻塞，直到建立起连接或者返回错误，如果成功，则将通过<code>socket</code>函数创建的描述符变为<strong>已连接的客户端描述符</strong>clientfd，建议使用<code>getaddrinfo</code>函数为它提供参数</li></ul><p>服务器用于同客户端建立连接的函数：</p><ul><li><p><code>bind</code>函数：联系起socket_addr(服务器套接字地址)与socket套接字描述符，成功则返回0，否则-1</p></li><li><p><code>listen</code>函数：若服务器调用此函数，则将通过<code>socket</code>函数创建的描述符从默认的主动描述符转化为<strong>监听描述符</strong>listenfd，同样建议使用<code>getaddrinfo</code>来提供参数</p></li><li><p><code>accept</code>函数：等待来自客户端的连接请求到达<strong>监听描述符</strong>listenfd，到达后，在socket_addr当中填写客户端的套接字地址，并返回<strong>已连接描述符</strong>connfd</p></li></ul><p>有了这些基本的工具，我们就可以建立起一个Naive版本的Proxy。具体代码就不在这贴了，附上连接，有比较详细的注释。 <a href=https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c>Github - Naive-Proxy的实现</a></p><h2 id=二尝试改进naive-proxy线程与io复用>二、尝试改进Naive-proxy：线程与I/O复用<a hidden class=anchor aria-hidden=true href=#二尝试改进naive-proxy线程与io复用>#</a></h2><p>为什么将我们上面的proxy取名为naive？考虑如下两个问题：</p><ul><li><p>问题一、多个客户端<strong>并发</strong>请求服务器正在监听的某一端口，naive-proxy会如何？</p></li><li><p>问题二、这些并发请求中，若处理某一个客户端的请求需要分配<strong>高性能</strong>时，naive-proxy会如何？</p></li></ul><p>我希望用一个现实中的例子来模拟：假设客户端连接是等待打饭的学生，我们的proxy或webserver是饭堂工作人员：</p><p>首先，让我们来考虑问题一，naive-proxy的天真之处之一就在于它假设客户端的请求将会十分有序，就像在食堂捧着餐盘排队的学生们。但是，事实不是如此，高并发才是proxy或者webserver需要面对的常态，换句话说，当学生们不再彬彬有礼，客客气气，而是和三天没吃饭的饿死鬼一样蜂拥而上。我们可怜的饭堂阿姨也只能一边给手伸得最长、盘子递得最前的饿死鬼拍一勺饭，一边大声却无济于事地喝斥排队。</p><p>然后，我们考虑问题二：naive-proxy的天真之处之二在于它假设客户端的请求一定是自己hold得住的、可以在合理时间内服务完毕的，假设这回，它遇到了一个请求资源十分大的连接请求：比方食堂阿姨遇到了一个奇怪的同学，他身材黝黑矮小，却拖着一个几乎和他体型一样大的麻袋，不问不知道，原来里面装着全班人的餐盘！这回不只是阿姨傻眼了，蜂拥而上的同学们也在旁边傻眼了&mdash;-只能眼巴巴看着阿姨先给这位同学的全班打饭。</p><p>当然了，对于食堂打饭的问题，如果我们有足够多的食堂窗口，并且聘请足够多的食堂阿姨，然后请思政老师好好把关学生素质，让他们自觉遵守校规，不是什么难事。但是计算机世界不是这样运作的！</p><p>我们为proxy提供的解决方案如下：</p><ul><li><p>针对问题一：使用I/O复用技术，关键在于<code>select</code>函数来监控多个描述符的状态，这样我们就直到应该处理哪些个连接请求</p></li><li><p>针对问题二：使用线程池技术，关键在于不同请求类型都可创建线程占用一个CPU执行</p></li></ul><h4 id=select如何使用>select如何使用<a hidden class=anchor aria-hidden=true href=#select如何使用>#</a></h4><p><code>select</code>是一个用于监视多个socket事件的系统调用，其所处理的数据结构是描述符集合<code>fd_set</code>, 并且修改<code>fd_set</code>中描述符的状态变化(它所监控的状态有三种&mdash;-可读、可写、异常)。</p><p><code>fd_set</code>是什么？</p><p>本质上，fd_set 是一个固定大小的位数组（bit array）。每一个位（bit）代表一个文件描述符。</p><ul><li><p>如果某个位被设置为 1，表示对应的文件描述符正在被监视。</p></li><li><p>如果为 0，则表示不关心该文件描述符。</p></li></ul><p>例如，在一个 1024 位的 fd_set 中：</p><ul><li><p>位 0 (第1位) 代表文件描述符 0 (标准输入)</p></li><li><p>位 5 (第6位) 代表文件描述符 5，以此类推&mldr;</p></li></ul><p>在 Linux 中，fd_set 的大小通常是固定的，由常量 FD_SETSIZE 定义。 这个值通常是 1024。这意味着 select 能同时监视的文件描述符数量上限是 1024。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C><span class=line><span class=ln>1</span><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;sys/select.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=ln>2</span><span class=cl>
+</span></span><span class=line><span class=ln>3</span><span class=cl><span class=kt>int</span> <span class=nf>select</span><span class=p>(</span><span class=kt>int</span> <span class=n>nfds</span><span class=p>,</span> <span class=n>fd_set</span> <span class=o>*</span><span class=n>readfds</span><span class=p>,</span> <span class=n>fd_set</span> <span class=o>*</span><span class=n>writefds</span><span class=p>,</span>
+</span></span><span class=line><span class=ln>4</span><span class=cl>           <span class=n>fd_set</span> <span class=o>*</span><span class=n>exceptfds</span><span class=p>,</span> <span class=k>struct</span> <span class=n>timeval</span> <span class=o>*</span><span class=n>timeout</span><span class=p>);</span> <span class=c1>//timeout是可选项
+</span></span></span></code></pre></div><p>图2.1 select函数原型</p><p>通过一些宏，我们可以操作描述符集合:</p><ul><li><p>FD_ZERO(&amp;set): 清空集合</p></li><li><p>FD_SET(fd, &amp;set): 添加文件描述符到集合</p></li><li><p>FD_CLR(fd, &amp;set): 从集合中移除文件描述符</p></li><li><p>FD_ISSET(fd, &amp;set): 检查文件描述符是否在集合中</p></li></ul><h4 id=线程的简单介绍>线程的简单介绍<a hidden class=anchor aria-hidden=true href=#线程的简单介绍>#</a></h4><p>线程是一种运行在进程上下文当中的逻辑流，也就是说，不同的线程只不过是同一进程之中的切换，共享这个进程当中的整个<strong>虚拟地址空间的所有内容</strong>。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C><span class=line><span class=ln> 1</span><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=ln> 2</span><span class=cl>	<span class=kt>pthread_t</span> <span class=n>tid</span><span class=p>;</span> <span class=c1>//线程号tid
+</span></span></span><span class=line><span class=ln> 3</span><span class=cl>	<span class=nf>Pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>tid</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=kr>thread</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>);</span> <span class=c1>//线程创建
+</span></span></span><span class=line><span class=ln> 4</span><span class=cl>	<span class=nf>Pthread_join</span><span class=p>(</span><span class=n>tid</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>);</span> <span class=c1>//调用线程
+</span></span></span><span class=line><span class=ln> 5</span><span class=cl>	<span class=nf>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=ln> 6</span><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=ln> 7</span><span class=cl>
+</span></span><span class=line><span class=ln> 8</span><span class=cl><span class=c1>//线程所执行的内容
+</span></span></span><span class=line><span class=ln> 9</span><span class=cl><span class=kt>void</span> <span class=o>*</span><span class=nf>thread</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>vargp</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=ln>10</span><span class=cl>	<span class=nf>printf</span><span class=p>(</span><span class=s>&#34;hello world</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=ln>11</span><span class=cl>	<span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+</span></span><span class=line><span class=ln>12</span><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>图2.2 线程版本的hello world</p><p>mature-proxy 当中所涉及的线程代码十分简单，不过值得多嘴一提：</p><ul><li><p><code>Pthread_join</code>调用的时候，会发生阻塞，直到线程tid的内容执行完毕，然后返回一个指向通用（void）指针，在hello程序当中，这个指针指向的位置是NULL。然后，线程所使用的资源被回收。</p></li><li><p>线程是<strong>可结合</strong>的或者<strong>分离的</strong>，一个可结合的线程能够被其他线程所回收和杀死，然而，一个分离的线程所占用的资源只能在其终止时被系统自然释放。我们可以通过<code>int pthread_detach(pthread_t tid)</code>函数来创建一个分离的线程，如果我们需要分离这个线程他自己，可以通过<code>pthread_self</code>函数来获取自己的tid。</p></li></ul><p>在mature-proxy当中，我们用线程改进naive-proxy的思路是创建一些线程池，也就是说，为了避免需要使用线程的时候我们还需要临时创建这种情况，我们提前创建了合理数目的线程，并且在需要使用的时候直接就可以使用。这种方法被称为线程池。</p><p>有兴趣了解线程池技术的朋友，可以参考下我写的另一篇<a href=/content/blog/threadpool.md>有关线程池的文章</a>。</p></div><footer class=post-footer><ul class=post-tags><li><a href=https://NeilYuan0404.github.io/zh/tags/csapp/>CSAPP</a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/>代理服务器</a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/>网络编程</a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/>C语言</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://NeilYuan0404.github.io/zh/>Home</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

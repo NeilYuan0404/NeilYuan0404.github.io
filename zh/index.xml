@@ -1,67 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Home</title>
-    <link>http://localhost:1313/zh/</link>
-    <description>Recent content on Home</description>
-    <generator>Hugo -- 0.153.4</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sat, 03 Jan 2026 16:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/zh/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>关于</title>
-      <link>http://localhost:1313/zh/about/</link>
-      <pubDate>Sat, 03 Jan 2026 16:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/zh/about/</guid>
-      <description>&lt;p&gt;我是Neil，本科毕业于中国传媒大学信息与通信工程学院，目前在香港城市大学修读硕士学位。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>友链</title>
-      <link>http://localhost:1313/zh/links/</link>
-      <pubDate>Sat, 03 Jan 2026 16:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/zh/links/</guid>
-      <description>&lt;p&gt;我的母校：
-&lt;a href=&#34;https://www.cuc.edu.cn/&#34;&gt;中国传媒大学&lt;/a&gt;
-&lt;a href=&#34;https://www.cityu.edu.hk/&#34;&gt;香港城市大学&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>实现TCP发送HTTP请求</title>
-      <link>http://localhost:1313/zh/blog/tcp/</link>
-      <pubDate>Sun, 28 Dec 2025 12:45:38 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/tcp/</guid>
-      <description>&lt;p&gt;HTTP协议是最被广泛使用的网络传输协议，所有的www文件都必须遵守这个标准，并且，HTTP基于TCP/IP通信协议来传递数据，本文的主要内容是介绍HTTP请求的的格式，并且使用C语言以TCP的方式来实现请求的发送。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>用UDP实现向DNS服务器请求IP地址</title>
-      <link>http://localhost:1313/zh/blog/udp/</link>
-      <pubDate>Thu, 25 Dec 2025 00:38:32 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/udp/</guid>
-      <description>&lt;p&gt;IP地址是网络层通信的基础，但是并不方便人类记忆，所以需要DNS域名系统来实现将IP地址和DNS之间的解析，简单来说，域名解析分为两个关键步骤：&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>C语言实现MySQL图片读写</title>
-      <link>http://localhost:1313/zh/blog/read_write_images_mysql/</link>
-      <pubDate>Tue, 25 Nov 2025 22:59:02 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/read_write_images_mysql/</guid>
-      <description>&lt;h4 id=&#34;内容介绍&#34;&gt;内容介绍&lt;/h4&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/NeilYuan0404/Toys/blob/main/Mysql.c&#34;&gt;Github - C语言实现MySQL图片读写&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作&lt;strong&gt;图片的读写&lt;/strong&gt;。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>一文带你搞清楚什么是线程池</title>
-      <link>http://localhost:1313/zh/blog/threadpool/</link>
-      <pubDate>Fri, 21 Nov 2025 12:29:21 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/threadpool/</guid>
-      <description>&lt;h2 id=&#34;内容简介&#34;&gt;内容简介&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Home</title><link>https://NeilYuan0404.github.io/zh/</link><description>Recent content on Home</description><generator>Hugo -- 0.153.4</generator><language>zh-cn</language><lastBuildDate>Sat, 03 Jan 2026 16:00:00 +0800</lastBuildDate><atom:link href="https://NeilYuan0404.github.io/zh/index.xml" rel="self" type="application/rss+xml"/><item><title>关于</title><link>https://NeilYuan0404.github.io/zh/about/</link><pubDate>Sat, 03 Jan 2026 16:00:00 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/about/</guid><description>&lt;p&gt;我是Neil，本科毕业于中国传媒大学信息与通信工程学院，目前在香港城市大学修读硕士学位。&lt;/p&gt;</description></item><item><title>友链</title><link>https://NeilYuan0404.github.io/zh/links/</link><pubDate>Sat, 03 Jan 2026 16:00:00 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/links/</guid><description>&lt;p&gt;我的母校：
+&lt;a href="https://www.cuc.edu.cn/"&gt;中国传媒大学&lt;/a&gt;
+&lt;a href="https://www.cityu.edu.hk/"&gt;香港城市大学&lt;/a&gt;&lt;/p&gt;</description></item><item><title>实现TCP发送HTTP请求</title><link>https://NeilYuan0404.github.io/zh/blog/tcp/</link><pubDate>Sun, 28 Dec 2025 12:45:38 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/tcp/</guid><description>&lt;p&gt;HTTP协议是最被广泛使用的网络传输协议，所有的www文件都必须遵守这个标准，并且，HTTP基于TCP/IP通信协议来传递数据，本文的主要内容是介绍HTTP请求的的格式，并且使用C语言以TCP的方式来实现请求的发送。&lt;/p&gt;</description></item><item><title>用UDP实现向DNS服务器请求IP地址</title><link>https://NeilYuan0404.github.io/zh/blog/udp/</link><pubDate>Thu, 25 Dec 2025 00:38:32 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/udp/</guid><description>&lt;p&gt;IP地址是网络层通信的基础，但是并不方便人类记忆，所以需要DNS域名系统来实现将IP地址和DNS之间的解析，简单来说，域名解析分为两个关键步骤：&lt;/p&gt;</description></item><item><title>C语言实现MySQL图片读写</title><link>https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/</link><pubDate>Tue, 25 Nov 2025 22:59:02 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/</guid><description>&lt;h4 id="内容介绍"&gt;内容介绍&lt;/h4&gt;
+&lt;p&gt;&lt;a href="https://github.com/NeilYuan0404/Toys/blob/main/Mysql.c"&gt;Github - C语言实现MySQL图片读写&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作&lt;strong&gt;图片的读写&lt;/strong&gt;。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。&lt;/p&gt;</description></item><item><title>一文带你搞清楚什么是线程池</title><link>https://NeilYuan0404.github.io/zh/blog/threadpool/</link><pubDate>Fri, 21 Nov 2025 12:29:21 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/threadpool/</guid><description>&lt;h2 id="内容简介"&gt;内容简介&lt;/h2&gt;
 &lt;p&gt;1.线程池介绍：&lt;/p&gt;
-&lt;p&gt;当客户端并发请求服务器的时候，服务器的响应是通过创建线程的方式来实现的。但是当并发的请求过于密集的时候，比如同时有十万个客户端请求服务，创建这些线程的开销是不可接受的：按照POSIX标准，一个线程占用8M的空间， 也就是说1G（1024M）的内存只能接受创建128个线程，假设一个服务器的内存是16G，同时也只能够接受创建2048个线程。这对于十万个客户端请求来说，简直是杯水车薪。所以我们需要&amp;mdash;-线程池。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>新手必做：一个简易通讯录带你入门C</title>
-      <link>http://localhost:1313/zh/blog/phonebook/</link>
-      <pubDate>Sun, 16 Nov 2025 13:55:00 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/phonebook/</guid>
-      <description>&lt;h3 id=&#34;概览&#34;&gt;概览&lt;/h3&gt;
+&lt;p&gt;当客户端并发请求服务器的时候，服务器的响应是通过创建线程的方式来实现的。但是当并发的请求过于密集的时候，比如同时有十万个客户端请求服务，创建这些线程的开销是不可接受的：按照POSIX标准，一个线程占用8M的空间， 也就是说1G（1024M）的内存只能接受创建128个线程，假设一个服务器的内存是16G，同时也只能够接受创建2048个线程。这对于十万个客户端请求来说，简直是杯水车薪。所以我们需要&amp;mdash;-线程池。&lt;/p&gt;</description></item><item><title>新手必做：一个简易通讯录带你入门C</title><link>https://NeilYuan0404.github.io/zh/blog/phonebook/</link><pubDate>Sun, 16 Nov 2025 13:55:00 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/phonebook/</guid><description>&lt;h3 id="概览"&gt;概览&lt;/h3&gt;
 &lt;p&gt;也许你是一位大学CS新生，也许你出于兴趣爱好刚学完C语法。&lt;/p&gt;
 &lt;p&gt;可是，你是否困惑？&lt;/p&gt;
 &lt;ul&gt;
@@ -71,44 +14,27 @@
 &lt;li&gt;宏是什么？&lt;/li&gt;
 &lt;li&gt;数据结构有什么用？&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;一个基于C语言的简单通讯录，麻雀虽小，五脏俱全。它涉及了C语言语法中最让新手头疼的一些部分&amp;mdash;-指针、malloc等；涉及了一个可靠项目的大体结构搭建&amp;mdash;-业务、接口和底层；还涉及了与CS其他学科交叉的方面&amp;mdash;-数据结构、文件I/O。如果你刚学完C语法，不知道接下来应该干什么？那么这个项目将会是一个很好的开始&amp;mdash;-它足够简单：以至于你不会陷入复杂度的泥潭里失去对CS进一步学习的兴趣，它足够精炼：以至于你一定会学有所得，迫切地想要开展进一步的学习！&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>使用shell查看当前局域网宕机的IP地址</title>
-      <link>http://localhost:1313/zh/blog/check_ip_shell/</link>
-      <pubDate>Fri, 14 Nov 2025 22:48:24 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/check_ip_shell/</guid>
-      <description>&lt;h4 id=&#34;测试环境-macos-12&#34;&gt;测试环境 macOS 12&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;neil@192 ~ % sysctl -n hw.model
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;10Mac14,2
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;neil@192 ~ % sw_vers
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;ProductName: macOS
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;ProductVersion: 12.7.4
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;BuildVersion: 21H1123
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;ln&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;cl&#34;&gt;neil@192 ~ %
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;用到的命令&#34;&gt;用到的命令：&lt;/h4&gt;
+&lt;p&gt;一个基于C语言的简单通讯录，麻雀虽小，五脏俱全。它涉及了C语言语法中最让新手头疼的一些部分&amp;mdash;-指针、malloc等；涉及了一个可靠项目的大体结构搭建&amp;mdash;-业务、接口和底层；还涉及了与CS其他学科交叉的方面&amp;mdash;-数据结构、文件I/O。如果你刚学完C语法，不知道接下来应该干什么？那么这个项目将会是一个很好的开始&amp;mdash;-它足够简单：以至于你不会陷入复杂度的泥潭里失去对CS进一步学习的兴趣，它足够精炼：以至于你一定会学有所得，迫切地想要开展进一步的学习！&lt;/p&gt;</description></item><item><title>使用shell查看当前局域网宕机的IP地址</title><link>https://NeilYuan0404.github.io/zh/blog/check_ip_shell/</link><pubDate>Fri, 14 Nov 2025 22:48:24 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/check_ip_shell/</guid><description>&lt;h4 id="测试环境-macos-12"&gt;测试环境 macOS 12&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;1&lt;/span&gt;&lt;span class="cl"&gt;neil@192 ~ % sysctl -n hw.model
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;2&lt;/span&gt;&lt;span class="cl"&gt;10Mac14,2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;3&lt;/span&gt;&lt;span class="cl"&gt;neil@192 ~ % sw_vers
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;4&lt;/span&gt;&lt;span class="cl"&gt;ProductName: macOS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;5&lt;/span&gt;&lt;span class="cl"&gt;ProductVersion: 12.7.4
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;6&lt;/span&gt;&lt;span class="cl"&gt;BuildVersion: 21H1123
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="ln"&gt;7&lt;/span&gt;&lt;span class="cl"&gt;neil@192 ~ %
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="用到的命令"&gt;用到的命令：&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;ifconfig : 我们需要使用这个命令来查看自己的局域网网段，从而才能使用ping来尝试连接。&lt;/li&gt;
 &lt;li&gt;ping : 我们使用ping来尝试连接，即测试是否宕机。&lt;/li&gt;
 &lt;li&gt;shell中的for循环&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;步骤&#34;&gt;步骤：&lt;/h4&gt;
-&lt;p&gt;1.使用ifconfig查看自己的局域网网段&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>CSAPP：ProxyLab讲解与实现</title>
-      <link>http://localhost:1313/zh/blog/proxylab/</link>
-      <pubDate>Sun, 09 Nov 2025 12:27:31 +0800</pubDate>
-      <guid>http://localhost:1313/zh/blog/proxylab/</guid>
-      <description>&lt;p&gt;&lt;em&gt;纸上得来终觉浅，绝知此事要躬行。&lt;/em&gt;&lt;/p&gt;
+&lt;h4 id="步骤"&gt;步骤：&lt;/h4&gt;
+&lt;p&gt;1.使用ifconfig查看自己的局域网网段&lt;/p&gt;</description></item><item><title>CSAPP：ProxyLab讲解与实现</title><link>https://NeilYuan0404.github.io/zh/blog/proxylab/</link><pubDate>Sun, 09 Nov 2025 12:27:31 +0800</pubDate><guid>https://NeilYuan0404.github.io/zh/blog/proxylab/</guid><description>&lt;p&gt;&lt;em&gt;纸上得来终觉浅，绝知此事要躬行。&lt;/em&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3 id=&#34;内容介绍&#34;&gt;内容介绍&lt;/h3&gt;
+&lt;h3 id="内容介绍"&gt;内容介绍&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;一、（已更）从CS:APP ProxyLab这辆玩具车出发  &lt;a href=&#34;https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c&#34;&gt;Github - Naive-Proxy的实现&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;一、（已更）从CS:APP ProxyLab这辆玩具车出发 &lt;a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/naive-proxy.c"&gt;Github - Naive-Proxy的实现&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;二、（已更）尝试改进玩具车Proxy：线程与I/O复用 &lt;a href=&#34;https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/mature-proxy.c&#34;&gt;Github - Mature-Proxy的实现&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+&lt;p&gt;二、（已更）尝试改进玩具车Proxy：线程与I/O复用 &lt;a href="https://github.com/NeilYuan0404/csapplabs/blob/main/proxylab/proxylab-handout/mature-proxy.c"&gt;Github - Mature-Proxy的实现&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>
