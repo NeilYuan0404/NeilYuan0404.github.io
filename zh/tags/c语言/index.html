@@ -1,19 +1,324 @@
-<!doctype html><html lang=zh dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>C语言 | Home</title><meta name=keywords content><meta name=description content><meta name=author content><link rel=canonical href=https://NeilYuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/><link crossorigin=anonymous href=/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css integrity="sha256-NDzEgLn/yPBMy+XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as=style><link rel=icon href=https://NeilYuan0404.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://NeilYuan0404.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://NeilYuan0404.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://NeilYuan0404.github.io/apple-touch-icon.png><link rel=mask-icon href=https://NeilYuan0404.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://NeilYuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/index.xml title=rss><link rel=alternate hreflang=zh href=https://NeilYuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://NeilYuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/"><meta property="og:site_name" content="Home"><meta property="og:title" content="C语言"><meta property="og:locale" content="zh-cn"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="C语言"><meta name=twitter:description content></head><body class=list id=top><header class=header><nav class=nav><div class=logo><a href=https://NeilYuan0404.github.io/zh/ accesskey=h title="Home (Alt + H)">Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
-<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button><ul class=lang-switch><li>|</li><li><a href=https://NeilYuan0404.github.io/en/ title=English aria-label=English>En</a></li></ul></div></div><ul id=menu><li><a href=https://NeilYuan0404.github.io/zh/ title=主页><span>主页</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/ title=标签><span>标签</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/archives/ title=归档><span>归档</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/about/ title=关于><span>关于</span></a></li></ul></nav></header><main class=main><header class=page-header><h1>C语言</h1></header><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>实现TCP发送HTTP请求</h2></header><div class=entry-content><p>HTTP协议是最被广泛使用的网络传输协议，所有的www文件都必须遵守这个标准，并且，HTTP基于TCP/IP通信协议来传递数据，本文的主要内容是介绍HTTP请求的的格式，并且使用C语言以TCP的方式来实现请求的发送。
-...</p></div><footer class=entry-footer><span title='2025-12-28 12:45:38 +0800 CST'>2025年12月28日</span></footer><a class=entry-link aria-label="post link to 实现TCP发送HTTP请求" href=https://NeilYuan0404.github.io/zh/blog/tcp/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>用UDP实现向DNS服务器请求IP地址</h2></header><div class=entry-content><p>IP地址是网络层通信的基础，但是并不方便人类记忆，所以需要DNS域名系统来实现将IP地址和DNS之间的解析，简单来说，域名解析分为两个关键步骤：
-...</p></div><footer class=entry-footer><span title='2025-12-25 00:38:32 +0800 CST'>2025年12月25日</span></footer><a class=entry-link aria-label="post link to 用UDP实现向DNS服务器请求IP地址" href=https://NeilYuan0404.github.io/zh/blog/udp/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>C语言实现MySQL图片读写</h2></header><div class=entry-content><p>内容介绍 Github - C语言实现MySQL图片读写
+<!DOCTYPE html>
+<html lang="zh" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>C语言 | Neil&#39;s Digital Garden</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="canonical" href="https://neilyuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://neilyuan0404.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://neilyuan0404.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://neilyuan0404.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://neilyuan0404.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://neilyuan0404.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://neilyuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/index.xml" title="rss">
+<link rel="alternate" hreflang="zh" href="https://neilyuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://neilyuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/">
+  <meta property="og:site_name" content="Neil&#39;s Digital Garden">
+  <meta property="og:title" content="C语言">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C语言">
+<meta name="twitter:description" content="">
+
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://neilyuan0404.github.io/zh/" accesskey="h" title="Neil&#39;s Digital Garden (Alt + H)">Neil&#39;s Digital Garden</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                    <ul class="lang-switch"><li>|</li>
+                        <li>
+                            <a href="https://neilyuan0404.github.io/en/" title="English"
+                                aria-label="English">En</a>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/" title="Blogs">
+                    <span>Blogs</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header">
+  <h1>
+    C语言
+  </h1>
+</header>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">简述Reactor原理
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>一、内容简介 一句话概括Reactor模式 = I/O多路复用&#43;I/O非阻塞&#43;事件循环，不同的I/O事件，执行不同的回调函数（Callback Function）。本文将分析Reactor模式的原理以及实现，并且基于此分析其相比于其他方法在高并发下的性能优势。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-01-13 17:49:32 +0800 CST'>2026年1月13日</span></footer>
+  <a class="entry-link" aria-label="post link to 简述Reactor原理" href="https://neilyuan0404.github.io/zh/blog/reactor/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">实现TCP发送HTTP请求
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>HTTP协议是最被广泛使用的网络传输协议，所有的www文件都必须遵守这个标准，并且，HTTP基于TCP/IP通信协议来传递数据，本文的主要内容是介绍HTTP请求的的格式，并且使用C语言以TCP的方式来实现请求的发送。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-12-28 12:45:38 +0800 CST'>2025年12月28日</span></footer>
+  <a class="entry-link" aria-label="post link to 实现TCP发送HTTP请求" href="https://neilyuan0404.github.io/zh/blog/tcp/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">用UDP实现向DNS服务器请求IP地址
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>IP地址是网络层通信的基础，但是并不方便人类记忆，所以需要DNS域名系统来实现将IP地址和DNS之间的解析，简单来说，域名解析分为两个关键步骤：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-12-25 00:38:32 +0800 CST'>2025年12月25日</span></footer>
+  <a class="entry-link" aria-label="post link to 用UDP实现向DNS服务器请求IP地址" href="https://neilyuan0404.github.io/zh/blog/udp/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">C语言实现MySQL图片读写
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>内容介绍 Github - C语言实现MySQL图片读写
 这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。
-...</p></div><footer class=entry-footer><span title='2025-11-25 22:59:02 +0800 CST'>2025年11月25日</span></footer><a class=entry-link aria-label="post link to C语言实现MySQL图片读写" href=https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>一文带你搞清楚什么是线程池</h2></header><div class=entry-content><p>内容简介 1.线程池介绍：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-11-25 22:59:02 +0800 CST'>2025年11月25日</span></footer>
+  <a class="entry-link" aria-label="post link to C语言实现MySQL图片读写" href="https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">一文带你搞清楚什么是线程池
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>内容简介 1.线程池介绍：
 当客户端并发请求服务器的时候，服务器的响应是通过创建线程的方式来实现的。但是当并发的请求过于密集的时候，比如同时有十万个客户端请求服务，创建这些线程的开销是不可接受的：按照POSIX标准，一个线程占用8M的空间， 也就是说1G（1024M）的内存只能接受创建128个线程，假设一个服务器的内存是16G，同时也只能够接受创建2048个线程。这对于十万个客户端请求来说，简直是杯水车薪。所以我们需要—-线程池。
-...</p></div><footer class=entry-footer><span title='2025-11-21 12:29:21 +0800 CST'>2025年11月21日</span></footer><a class=entry-link aria-label="post link to 一文带你搞清楚什么是线程池" href=https://NeilYuan0404.github.io/zh/blog/threadpool/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>新手必做：一个简易通讯录带你入门C</h2></header><div class=entry-content><p>概览 也许你是一位大学CS新生，也许你出于兴趣爱好刚学完C语法。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-11-21 12:29:21 +0800 CST'>2025年11月21日</span></footer>
+  <a class="entry-link" aria-label="post link to 一文带你搞清楚什么是线程池" href="https://neilyuan0404.github.io/zh/blog/threadpool/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">新手必做：一个简易通讯录带你入门C
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>概览 也许你是一位大学CS新生，也许你出于兴趣爱好刚学完C语法。
 可是，你是否困惑？
 指针应该使用在哪？ 双重指针是不是老手的炫技？ 为什么需要malloc和free？ 宏是什么？ 数据结构有什么用？ 一个基于C语言的简单通讯录，麻雀虽小，五脏俱全。它涉及了C语言语法中最让新手头疼的一些部分—-指针、malloc等；涉及了一个可靠项目的大体结构搭建—-业务、接口和底层；还涉及了与CS其他学科交叉的方面—-数据结构、文件I/O。如果你刚学完C语法，不知道接下来应该干什么？那么这个项目将会是一个很好的开始—-它足够简单：以至于你不会陷入复杂度的泥潭里失去对CS进一步学习的兴趣，它足够精炼：以至于你一定会学有所得，迫切地想要开展进一步的学习！
-...</p></div><footer class=entry-footer><span title='2025-11-16 13:55:00 +0800 CST'>2025年11月16日</span></footer><a class=entry-link aria-label="post link to 新手必做：一个简易通讯录带你入门C" href=https://NeilYuan0404.github.io/zh/blog/phonebook/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>CSAPP：ProxyLab讲解与实现</h2></header><div class=entry-content><p>纸上得来终觉浅，绝知此事要躬行。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-11-16 13:55:00 +0800 CST'>2025年11月16日</span></footer>
+  <a class="entry-link" aria-label="post link to 新手必做：一个简易通讯录带你入门C" href="https://neilyuan0404.github.io/zh/blog/phonebook/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">CSAPP：ProxyLab讲解与实现
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>纸上得来终觉浅，绝知此事要躬行。
 内容介绍 一、（已更）从CS:APP ProxyLab这辆玩具车出发 Github - Naive-Proxy的实现
 二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现
-...</p></div><footer class=entry-footer><span title='2025-11-09 12:27:31 +0800 CST'>2025年11月9日</span></footer><a class=entry-link aria-label="post link to CSAPP：ProxyLab讲解与实现" href=https://NeilYuan0404.github.io/zh/blog/proxylab/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://NeilYuan0404.github.io/zh/>Home</a></span> ·
-<span>Powered by
-<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
-<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
-</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-11-09 12:27:31 +0800 CST'>2025年11月9日</span></footer>
+  <a class="entry-link" aria-label="post link to CSAPP：ProxyLab讲解与实现" href="https://neilyuan0404.github.io/zh/blog/proxylab/"></a>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://neilyuan0404.github.io/zh/">Neil&#39;s Digital Garden</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

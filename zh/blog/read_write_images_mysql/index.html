@@ -1,190 +1,543 @@
-<!doctype html><html lang=zh dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>C语言实现MySQL图片读写 | Home</title><meta name=keywords content="C语言,MySQL,数据库"><meta name=description content="内容介绍
+<!DOCTYPE html>
+<html lang="zh" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>C语言实现MySQL图片读写 | Neil&#39;s Digital Garden</title>
+<meta name="keywords" content="C语言, MySQL, 数据库">
+<meta name="description" content="内容介绍
 Github - C语言实现MySQL图片读写
-这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。"><meta name=author content><link rel=canonical href=https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/><link crossorigin=anonymous href=/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css integrity="sha256-NDzEgLn/yPBMy+XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as=style><link rel=icon href=https://NeilYuan0404.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://NeilYuan0404.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://NeilYuan0404.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://NeilYuan0404.github.io/apple-touch-icon.png><link rel=mask-icon href=https://NeilYuan0404.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=zh href=https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/"><meta property="og:site_name" content="Home"><meta property="og:title" content="C语言实现MySQL图片读写"><meta property="og:description" content="内容介绍 Github - C语言实现MySQL图片读写
-这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。"><meta property="og:locale" content="zh-cn"><meta property="og:type" content="article"><meta property="article:section" content="blog"><meta property="article:published_time" content="2025-11-25T22:59:02+08:00"><meta property="article:modified_time" content="2025-11-25T22:59:02+08:00"><meta property="article:tag" content="C语言"><meta property="article:tag" content="MySQL"><meta property="article:tag" content="数据库"><meta name=twitter:card content="summary"><meta name=twitter:title content="C语言实现MySQL图片读写"><meta name=twitter:description content="内容介绍
+这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。">
+<meta name="author" content="">
+<link rel="canonical" href="https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://neilyuan0404.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://neilyuan0404.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://neilyuan0404.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://neilyuan0404.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://neilyuan0404.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/">
+  <meta property="og:site_name" content="Neil&#39;s Digital Garden">
+  <meta property="og:title" content="C语言实现MySQL图片读写">
+  <meta property="og:description" content="内容介绍 Github - C语言实现MySQL图片读写
+这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2025-11-25T22:59:02+08:00">
+    <meta property="article:modified_time" content="2025-11-25T22:59:02+08:00">
+    <meta property="article:tag" content="C语言">
+    <meta property="article:tag" content="MySQL">
+    <meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C语言实现MySQL图片读写">
+<meta name="twitter:description" content="内容介绍
 Github - C语言实现MySQL图片读写
-这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blogs","item":"https://NeilYuan0404.github.io/zh/blog/"},{"@type":"ListItem","position":2,"name":"C语言实现MySQL图片读写","item":"https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"C语言实现MySQL图片读写","name":"C语言实现MySQL图片读写","description":"内容介绍 Github - C语言实现MySQL图片读写\n这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。\n","keywords":["C语言","MySQL","数据库"],"articleBody":"内容介绍 Github - C语言实现MySQL图片读写\n这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。\n准备工作 UNIX或类UNIX操作系统 配置好MySQL，尤其是和读写权限有关的配置 C语言编程工具链gcc等 MySQL与C的连接器 — libmysqlclient-dev 第一部分：二进制数据读写 一、打印\n下面这个函数实现了打印我们的需要的表当中的所有数据。\n1 2int neil_mysql_select(MYSQL *handle) { 3 if (mysql_real_query(handle, SQL_SELECT_TBL_USER, strlen(SQL_SELECT_TBL_USER))) { 4 printf(\"mysql_real_query: %s\\n\", mysql_error(handle)); 5 } 6 7 MYSQL_RES *res = mysql_store_result(handle); 8 if (res == NULL) { 9 printf(\"mysql_real_query: %s\\n\", mysql_error(handle)); 10 return -2; 11 } 12 13 int rows = mysql_num_rows(res); 14 printf(\"rows: %d\\n\", rows); 15 16 int fields = mysql_num_fields(res); 17 printf(\"fields: %d\\n\",fields); 18 19 //取出并且显示结果 20 MYSQL_ROW row; 21 while ((row = mysql_fetch_row(res))) { 22 23 int i = 0; 24 for (i = 0; i \u003c fields; i++) { 25 printf(\"%s\\t\", row[i]); 26 } 27 printf(\"\\n\"); 28 } 29 30 31 mysql_free_result(res); 32 33 return 0; 技术阐释： 上面实现的函数中传递了一个特别的参数叫做handle，名字叫做数据库连接句柄。有了它，我们才可以从NS连接到数据库，并且进行我们想要的操作，并且当操作不成功的时候，他可以通过mysql_error(handle)返回错误值。\n第一个涉及到的mysql函数就是mysql_real_query()，这个函数可用于实现SQL查询，它接受handle，和我们所要执行的SQl查询语句，还有长度作为参数。之后我们就会看到为了实现SQL还有一个不同的办法， 叫做预处理语句。\n第13行和16行的这两个函数分别是为了获取行和列的数目。\n代码第21行这个while循环，就是不断地从我们想要的表中读取数据行，并且显示结果。\nmysql_free_result(res)用于释放我们查询所占用的内存空间res。比较值的说的是这个res是我们在第7行创建的，用于存储我们查询所得的结果。\n二、写入\n下面这一个函数实现了二进制数据的写入。\n1 2int mysql_write(MYSQL *handle, char *buffer, int length) { 3 4 if(handle == NULL || buffer == NULL || length \u003c= 0) return -1; 5 //statement 6 MYSQL_STMT *stmt = mysql_stmt_init(handle); 7 int ret = mysql_stmt_prepare(stmt, SQL_INSERT_IMG_USER, strlen(SQL_INSERT_IMG_USER)); 8 if (ret) { 9 printf(\"mysql_stmt_prepar: %s\\n\", mysql_error(handle)); 10 return -2; 11 } 12 13 MYSQL_BIND param = {0}; 14 param.buffer_type = MYSQL_TYPE_LONG_BLOB; 15 param.buffer = NULL; 16 param.is_null = 0; 17 param.length = NULL; 18 19 ret = mysql_stmt_bind_param(stmt, \u0026param); 20 if (ret) { 21 printf(\"mysql_stmt_bind_param: %s\\n\", mysql_error(handle)); 22 return -3; 23 } 24 //分段将数据发到服务器 25 ret = mysql_stmt_send_long_data(stmt, 0, buffer, length); 26 if (ret) { 27 printf(\"mysql_stmt_send_long_data: %s\\n\", mysql_error(handle)); 28 return -4; 29 } 30 //执行：插入到服务器里 31 ret = mysql_stmt_execute(stmt); 32 if (ret) { 33 printf(\"mysql_stmt_execute: %s\\n\", mysql_error(handle)); 34 return -5; 35 } 36 //关闭 37 ret = mysql_stmt_close(stmt); 38 if (ret) { 39 printf(\"mysql_stmt_close: %s\\n\", mysql_error(handle)); 40 return -6; 41 } 42 43 return ret; 44} 技术阐释：同样是为了实现SQL语句，与之前说过的mysql_real_query相对，在以上代码的第6行，有一个比较特别的预处理语句句柄的定义—statment，预处理语句使用场景\n安全性：有效防止注入攻击 高性能：重复的查询，亦只需要一次编译 二进制数据：更好支持大二进制数据类型BLOB 使用预处理语句可以减少输入的风险，并且减少网络传递负担。并且因为这些优点，预处理语句更加频繁的出现在实际使用当中。\n我们之前使用的mysql_real_query实现简单便于调试，比较适合一次性的查询，比如我们之前查完就释放掉了内存空间。\nSQL当中实现插入的语句当然是insert，我们在Mysql.c的最开始使用#define定义了它：#define SQL_INSERT_IMG_USER \"insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);\"，和其他SQL语句一样，我们这样定义是为了方便在下面的代码当中引用。\n值得注意的是，对于u_img这个列而言，我们想要插入的数据是图片，可是图片并不是一个普通的字符串数据，图片数据的大小非常大，回想之前我们提到过的办法—将他转化为二进制文件，分段发送，这就是我们上面这个函数的思路。\n以上代码的第13～17行定义了一个MYSQL_BIND，这是为了提前告诉服务器所需要传递参数的类型。因为我们在传递参数的时候使用的是SQL_INSERT_IMG_USER \"insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);而最后面这个?是需要bind的内容。13～17行的作用依次为：\nMYSQL_BIND参数说明：\nbuffer_type = MYSQL_TYPE_LONG_BLOB - 指定参数为二进制大对象类型 buffer = NULL - 不直接提供数据缓冲区，使用分段发送 is_null = 0 - 明确表示该参数不是NULL值 length = NULL - 长度信息将在mysql_stmt_send_long_data中提供 之后的代码就是将预处理的语句statement执行，即分段发送二进制数据，完成后关闭statement。\n三、读出\n以下函数实现了二进制数据的读出，整体来看，结构和之前的二进制数据写入差不多，值得注意的是，38行的while（1）是为了处理多行数据，而其中的内层循环是为了从服务器接收分段的数据进入buffer，并且验证数据是否有丢失（MYSQL_DATA_TRUNCATED）\n1//从数据库中读取出来 2int mysql_read(MYSQL *handle, char *buffer, int length) { 3 if(handle == NULL || buffer == NULL || length \u003c= 0) return -1; 4 5 MYSQL_STMT *stmt = mysql_stmt_init(handle); 6 int ret = mysql_stmt_prepare(stmt, SQL_SELECT_IMG_USER, strlen(SQL_SELECT_IMG_USER)); 7 if (ret) { 8 printf(\"mysql_stmt_prepar: %s\\n\", mysql_error(handle)); 9 return -2; 10 } 11 12 13 MYSQL_BIND result = {0}; 14 15 16 result.buffer_type = MYSQL_TYPE_LONG_BLOB; 17 unsigned long total_length = 0; 18 result.length = \u0026total_length; 19 20 ret = mysql_stmt_bind_result(stmt, \u0026result); 21 if (ret) { 22 printf(\"mysql_stmt_bind_result: %s\\n\", mysql_error(handle)); 23 return -3; 24 } 25 26 ret = mysql_stmt_execute(stmt); 27 if (ret) { 28 printf(\"mysql_stmt_execute: %s\\n\", mysql_error(handle)); 29 return -4; 30 } 31 32 ret = mysql_stmt_store_result(stmt); 33 if (ret) { 34 printf(\"mysql_stmt_store_result: %s\\n\", mysql_error(handle)); 35 return -5; 36 } 37 //多个数据 38 while(1) { 39 ret = mysql_stmt_fetch(stmt); 40 if (ret != 0 \u0026\u0026 ret != MYSQL_DATA_TRUNCATED) { 41 break; 42 } 43 int start = 0; 44 //内层循环 45 while(start \u003c (int)total_length) { 46 result.buffer = buffer + start; //结果集的buffer和存储图片的buffer是同一个 47 result.buffer_length = 1; 48 mysql_stmt_fetch_column(stmt, \u0026result, 0, start); 49 start += result.buffer_length; 50 } 51 } 52 mysql_stmt_close(stmt); 53 return total_length; 54} 第二部分：图片读写 下面的目标是提供一个接口，用于在主函数main当中调用，可以直接操作我们想要的图片文件。\n一、图片写入\n1int read_image(char *filename, char *buffer) { 2 if (filename == NULL || buffer == NULL) return -1; 3 4 FILE *fp = fopen(filename, \"rb\"); //fp指向文件的开头 5 if (fp == NULL) { 6 printf(\"fopen failed\\n\"); 7 return -2; 8 } 9 10 //file size 11 //下面这个函数将fp指向末尾 12 fseek(fp, 0, SEEK_END); 13 int length = ftell(fp);//偏移量 14 fseek(fp, 0, SEEK_SET); 15 16 int size = fread(buffer, 1, length, fp); 17 if (size != length) { 18 printf(\"fread failed:%d\\n\", size); 19 return -3; 20 } 21 22 fclose(fp); 23 24 return size; 25} 技术阐释：以上函数的作用就是从filename这个路径中获取我们想要的文件，并将其导入到buffer当中，然后，我们之前实现的二进制数据处理函数就可以顺利地从buffer当中找到需要发送到Mysql服务器的二进制图片数据。\n你可能注意到了，从图片格式到二进制数据流这个转换的过程究竟是如何完成的？—答案是fopen，因为我们指定了一个fopen中的第二个参数为“rb”：\nr代表read only，只读 b代表二进制 如果不指定b这个参数，则默认使用文本模式导入，一定要注意的是，图片格式一定不可以用文本模式导入，这会导致一些严重的格式问题，比如说换行符的转换。\n文件模式说明：\n\"rb\" - 二进制只读模式（图片读取） \"wb\" - 二进制只写模式，会清空原文件 \"wb+\" - 二进制读写模式，会清空原文件 对于图片保存，使用\"wb\"更为合适 二、图片读取\n几乎和图片写入对称，不多赘述。\n1int write_image(char *filename, char *buffer, int length) { 2 if (filename == NULL || buffer == NULL || length \u003c= 0) return -1; 3 4 FILE *fp = fopen(filename, \"wb+\"); //fp指向文件的开头 5 if (fp == NULL) { 6 printf(\"fopen failed\\n\"); 7 return -2; 8 } 9 10 int size = fwrite(buffer, 1, length, fp); 11 if (size != length) { 12 printf(\"fwrite failed: %d\\n\", size); 13 return -3; 14 } 15 16 fclose(fp); 17 18 return size; 19 20} ","wordCount":"2754","inLanguage":"zh","datePublished":"2025-11-25T22:59:02+08:00","dateModified":"2025-11-25T22:59:02+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://NeilYuan0404.github.io/zh/blog/read_write_images_mysql/"},"publisher":{"@type":"Organization","name":"Home","logo":{"@type":"ImageObject","url":"https://NeilYuan0404.github.io/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=nav><div class=logo><a href=https://NeilYuan0404.github.io/zh/ accesskey=h title="Home (Alt + H)">Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
-<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button><ul class=lang-switch><li>|</li><li><a href=https://NeilYuan0404.github.io/en/ title=English aria-label=English>En</a></li></ul></div></div><ul id=menu><li><a href=https://NeilYuan0404.github.io/zh/ title=主页><span>主页</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/ title=标签><span>标签</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/archives/ title=归档><span>归档</span></a></li><li><a href=https://NeilYuan0404.github.io/zh/about/ title=关于><span>关于</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">C语言实现MySQL图片读写</h1><div class=post-meta><span title='2025-11-25 22:59:02 +0800 CST'>2025年11月25日</span></div></header><div class=post-content><h4 id=内容介绍>内容介绍<a hidden class=anchor aria-hidden=true href=#内容介绍>#</a></h4><p><a href=https://github.com/NeilYuan0404/Toys/blob/main/Mysql.c>Github - C语言实现MySQL图片读写</a></p><p>这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作<strong>图片的读写</strong>。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。</p><h6 id=准备工作>准备工作<a hidden class=anchor aria-hidden=true href=#准备工作>#</a></h6><ul><li>UNIX或类UNIX操作系统</li><li>配置好MySQL，尤其是和读写权限有关的配置</li><li>C语言编程工具链gcc等</li><li>MySQL与C的连接器 &mdash; libmysqlclient-dev</li></ul><h3 id=第一部分二进制数据读写>第一部分：二进制数据读写<a hidden class=anchor aria-hidden=true href=#第一部分二进制数据读写>#</a></h3><p><strong>一、打印</strong></p><p>下面这个函数实现了打印我们的需要的表当中的所有数据。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Mysql.c data-lang=Mysql.c><span class=line><span class=ln> 1</span><span class=cl>
-</span></span><span class=line><span class=ln> 2</span><span class=cl><span class=kt>int</span> <span class=nf>neil_mysql_select</span><span class=p>(</span><span class=n>MYSQL</span> <span class=o>*</span><span class=n>handle</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 3</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nf>mysql_real_query</span><span class=p>(</span><span class=n>handle</span><span class=p>,</span> <span class=n>SQL_SELECT_TBL_USER</span><span class=p>,</span> <span class=nf>strlen</span><span class=p>(</span><span class=n>SQL_SELECT_TBL_USER</span><span class=p>)))</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 4</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;mysql_real_query: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>mysql_error</span><span class=p>(</span><span class=n>handle</span><span class=p>));</span>
-</span></span><span class=line><span class=ln> 5</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln> 6</span><span class=cl>
-</span></span><span class=line><span class=ln> 7</span><span class=cl>  <span class=n>MYSQL_RES</span> <span class=o>*</span><span class=n>res</span> <span class=o>=</span> <span class=nf>mysql_store_result</span><span class=p>(</span><span class=n>handle</span><span class=p>);</span>
-</span></span><span class=line><span class=ln> 8</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>res</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 9</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;mysql_real_query: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>mysql_error</span><span class=p>(</span><span class=n>handle</span><span class=p>));</span>
-</span></span><span class=line><span class=ln>10</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>2</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>11</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>12</span><span class=cl>
-</span></span><span class=line><span class=ln>13</span><span class=cl>  <span class=kt>int</span> <span class=n>rows</span> <span class=o>=</span> <span class=nf>mysql_num_rows</span><span class=p>(</span><span class=n>res</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>14</span><span class=cl>  <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;rows: %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>rows</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>15</span><span class=cl>
-</span></span><span class=line><span class=ln>16</span><span class=cl>  <span class=kt>int</span> <span class=n>fields</span> <span class=o>=</span> <span class=nf>mysql_num_fields</span><span class=p>(</span><span class=n>res</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>17</span><span class=cl>  <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;fields: %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span><span class=n>fields</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>18</span><span class=cl>
-</span></span><span class=line><span class=ln>19</span><span class=cl>  <span class=c1>//取出并且显示结果
-</span></span></span><span class=line><span class=ln>20</span><span class=cl>  <span class=n>MYSQL_ROW</span> <span class=n>row</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>21</span><span class=cl>  <span class=k>while</span> <span class=p>((</span><span class=n>row</span> <span class=o>=</span> <span class=nf>mysql_fetch_row</span><span class=p>(</span><span class=n>res</span><span class=p>)))</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>22</span><span class=cl>
-</span></span><span class=line><span class=ln>23</span><span class=cl>    <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>24</span><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>fields</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>25</span><span class=cl>      <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%s</span><span class=se>\t</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>row</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
-</span></span><span class=line><span class=ln>26</span><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=ln>27</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>28</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>29</span><span class=cl>  
-</span></span><span class=line><span class=ln>30</span><span class=cl>  
-</span></span><span class=line><span class=ln>31</span><span class=cl>  <span class=nf>mysql_free_result</span><span class=p>(</span><span class=n>res</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>32</span><span class=cl>
-</span></span><span class=line><span class=ln>33</span><span class=cl>  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "https://neilyuan0404.github.io/zh/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "C语言实现MySQL图片读写",
+      "item": "https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C语言实现MySQL图片读写",
+  "name": "C语言实现MySQL图片读写",
+  "description": "内容介绍 Github - C语言实现MySQL图片读写\n这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。\n",
+  "keywords": [
+    "C语言", "MySQL", "数据库"
+  ],
+  "articleBody": "内容介绍 Github - C语言实现MySQL图片读写\n这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。\n准备工作 UNIX或类UNIX操作系统 配置好MySQL，尤其是和读写权限有关的配置 C语言编程工具链gcc等 MySQL与C的连接器 — libmysqlclient-dev 第一部分：二进制数据读写 一、打印\n下面这个函数实现了打印我们的需要的表当中的所有数据。\n1 2int neil_mysql_select(MYSQL *handle) { 3 if (mysql_real_query(handle, SQL_SELECT_TBL_USER, strlen(SQL_SELECT_TBL_USER))) { 4 printf(\"mysql_real_query: %s\\n\", mysql_error(handle)); 5 } 6 7 MYSQL_RES *res = mysql_store_result(handle); 8 if (res == NULL) { 9 printf(\"mysql_real_query: %s\\n\", mysql_error(handle)); 10 return -2; 11 } 12 13 int rows = mysql_num_rows(res); 14 printf(\"rows: %d\\n\", rows); 15 16 int fields = mysql_num_fields(res); 17 printf(\"fields: %d\\n\",fields); 18 19 //取出并且显示结果 20 MYSQL_ROW row; 21 while ((row = mysql_fetch_row(res))) { 22 23 int i = 0; 24 for (i = 0; i \u003c fields; i++) { 25 printf(\"%s\\t\", row[i]); 26 } 27 printf(\"\\n\"); 28 } 29 30 31 mysql_free_result(res); 32 33 return 0; 技术阐释： 上面实现的函数中传递了一个特别的参数叫做handle，名字叫做数据库连接句柄。有了它，我们才可以从NS连接到数据库，并且进行我们想要的操作，并且当操作不成功的时候，他可以通过mysql_error(handle)返回错误值。\n第一个涉及到的mysql函数就是mysql_real_query()，这个函数可用于实现SQL查询，它接受handle，和我们所要执行的SQl查询语句，还有长度作为参数。之后我们就会看到为了实现SQL还有一个不同的办法， 叫做预处理语句。\n第13行和16行的这两个函数分别是为了获取行和列的数目。\n代码第21行这个while循环，就是不断地从我们想要的表中读取数据行，并且显示结果。\nmysql_free_result(res)用于释放我们查询所占用的内存空间res。比较值的说的是这个res是我们在第7行创建的，用于存储我们查询所得的结果。\n二、写入\n下面这一个函数实现了二进制数据的写入。\n1 2int mysql_write(MYSQL *handle, char *buffer, int length) { 3 4 if(handle == NULL || buffer == NULL || length \u003c= 0) return -1; 5 //statement 6 MYSQL_STMT *stmt = mysql_stmt_init(handle); 7 int ret = mysql_stmt_prepare(stmt, SQL_INSERT_IMG_USER, strlen(SQL_INSERT_IMG_USER)); 8 if (ret) { 9 printf(\"mysql_stmt_prepar: %s\\n\", mysql_error(handle)); 10 return -2; 11 } 12 13 MYSQL_BIND param = {0}; 14 param.buffer_type = MYSQL_TYPE_LONG_BLOB; 15 param.buffer = NULL; 16 param.is_null = 0; 17 param.length = NULL; 18 19 ret = mysql_stmt_bind_param(stmt, \u0026param); 20 if (ret) { 21 printf(\"mysql_stmt_bind_param: %s\\n\", mysql_error(handle)); 22 return -3; 23 } 24 //分段将数据发到服务器 25 ret = mysql_stmt_send_long_data(stmt, 0, buffer, length); 26 if (ret) { 27 printf(\"mysql_stmt_send_long_data: %s\\n\", mysql_error(handle)); 28 return -4; 29 } 30 //执行：插入到服务器里 31 ret = mysql_stmt_execute(stmt); 32 if (ret) { 33 printf(\"mysql_stmt_execute: %s\\n\", mysql_error(handle)); 34 return -5; 35 } 36 //关闭 37 ret = mysql_stmt_close(stmt); 38 if (ret) { 39 printf(\"mysql_stmt_close: %s\\n\", mysql_error(handle)); 40 return -6; 41 } 42 43 return ret; 44} 技术阐释：同样是为了实现SQL语句，与之前说过的mysql_real_query相对，在以上代码的第6行，有一个比较特别的预处理语句句柄的定义—statment，预处理语句使用场景\n安全性：有效防止注入攻击 高性能：重复的查询，亦只需要一次编译 二进制数据：更好支持大二进制数据类型BLOB 使用预处理语句可以减少输入的风险，并且减少网络传递负担。并且因为这些优点，预处理语句更加频繁的出现在实际使用当中。\n我们之前使用的mysql_real_query实现简单便于调试，比较适合一次性的查询，比如我们之前查完就释放掉了内存空间。\nSQL当中实现插入的语句当然是insert，我们在Mysql.c的最开始使用#define定义了它：#define SQL_INSERT_IMG_USER \"insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);\"，和其他SQL语句一样，我们这样定义是为了方便在下面的代码当中引用。\n值得注意的是，对于u_img这个列而言，我们想要插入的数据是图片，可是图片并不是一个普通的字符串数据，图片数据的大小非常大，回想之前我们提到过的办法—将他转化为二进制文件，分段发送，这就是我们上面这个函数的思路。\n以上代码的第13～17行定义了一个MYSQL_BIND，这是为了提前告诉服务器所需要传递参数的类型。因为我们在传递参数的时候使用的是SQL_INSERT_IMG_USER \"insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);而最后面这个?是需要bind的内容。13～17行的作用依次为：\nMYSQL_BIND参数说明：\nbuffer_type = MYSQL_TYPE_LONG_BLOB - 指定参数为二进制大对象类型 buffer = NULL - 不直接提供数据缓冲区，使用分段发送 is_null = 0 - 明确表示该参数不是NULL值 length = NULL - 长度信息将在mysql_stmt_send_long_data中提供 之后的代码就是将预处理的语句statement执行，即分段发送二进制数据，完成后关闭statement。\n三、读出\n以下函数实现了二进制数据的读出，整体来看，结构和之前的二进制数据写入差不多，值得注意的是，38行的while（1）是为了处理多行数据，而其中的内层循环是为了从服务器接收分段的数据进入buffer，并且验证数据是否有丢失（MYSQL_DATA_TRUNCATED）\n1//从数据库中读取出来 2int mysql_read(MYSQL *handle, char *buffer, int length) { 3 if(handle == NULL || buffer == NULL || length \u003c= 0) return -1; 4 5 MYSQL_STMT *stmt = mysql_stmt_init(handle); 6 int ret = mysql_stmt_prepare(stmt, SQL_SELECT_IMG_USER, strlen(SQL_SELECT_IMG_USER)); 7 if (ret) { 8 printf(\"mysql_stmt_prepar: %s\\n\", mysql_error(handle)); 9 return -2; 10 } 11 12 13 MYSQL_BIND result = {0}; 14 15 16 result.buffer_type = MYSQL_TYPE_LONG_BLOB; 17 unsigned long total_length = 0; 18 result.length = \u0026total_length; 19 20 ret = mysql_stmt_bind_result(stmt, \u0026result); 21 if (ret) { 22 printf(\"mysql_stmt_bind_result: %s\\n\", mysql_error(handle)); 23 return -3; 24 } 25 26 ret = mysql_stmt_execute(stmt); 27 if (ret) { 28 printf(\"mysql_stmt_execute: %s\\n\", mysql_error(handle)); 29 return -4; 30 } 31 32 ret = mysql_stmt_store_result(stmt); 33 if (ret) { 34 printf(\"mysql_stmt_store_result: %s\\n\", mysql_error(handle)); 35 return -5; 36 } 37 //多个数据 38 while(1) { 39 ret = mysql_stmt_fetch(stmt); 40 if (ret != 0 \u0026\u0026 ret != MYSQL_DATA_TRUNCATED) { 41 break; 42 } 43 int start = 0; 44 //内层循环 45 while(start \u003c (int)total_length) { 46 result.buffer = buffer + start; //结果集的buffer和存储图片的buffer是同一个 47 result.buffer_length = 1; 48 mysql_stmt_fetch_column(stmt, \u0026result, 0, start); 49 start += result.buffer_length; 50 } 51 } 52 mysql_stmt_close(stmt); 53 return total_length; 54} 第二部分：图片读写 下面的目标是提供一个接口，用于在主函数main当中调用，可以直接操作我们想要的图片文件。\n一、图片写入\n1int read_image(char *filename, char *buffer) { 2 if (filename == NULL || buffer == NULL) return -1; 3 4 FILE *fp = fopen(filename, \"rb\"); //fp指向文件的开头 5 if (fp == NULL) { 6 printf(\"fopen failed\\n\"); 7 return -2; 8 } 9 10 //file size 11 //下面这个函数将fp指向末尾 12 fseek(fp, 0, SEEK_END); 13 int length = ftell(fp);//偏移量 14 fseek(fp, 0, SEEK_SET); 15 16 int size = fread(buffer, 1, length, fp); 17 if (size != length) { 18 printf(\"fread failed:%d\\n\", size); 19 return -3; 20 } 21 22 fclose(fp); 23 24 return size; 25} 技术阐释：以上函数的作用就是从filename这个路径中获取我们想要的文件，并将其导入到buffer当中，然后，我们之前实现的二进制数据处理函数就可以顺利地从buffer当中找到需要发送到Mysql服务器的二进制图片数据。\n你可能注意到了，从图片格式到二进制数据流这个转换的过程究竟是如何完成的？—答案是fopen，因为我们指定了一个fopen中的第二个参数为“rb”：\nr代表read only，只读 b代表二进制 如果不指定b这个参数，则默认使用文本模式导入，一定要注意的是，图片格式一定不可以用文本模式导入，这会导致一些严重的格式问题，比如说换行符的转换。\n文件模式说明：\n\"rb\" - 二进制只读模式（图片读取） \"wb\" - 二进制只写模式，会清空原文件 \"wb+\" - 二进制读写模式，会清空原文件 对于图片保存，使用\"wb\"更为合适 二、图片读取\n几乎和图片写入对称，不多赘述。\n1int write_image(char *filename, char *buffer, int length) { 2 if (filename == NULL || buffer == NULL || length \u003c= 0) return -1; 3 4 FILE *fp = fopen(filename, \"wb+\"); //fp指向文件的开头 5 if (fp == NULL) { 6 printf(\"fopen failed\\n\"); 7 return -2; 8 } 9 10 int size = fwrite(buffer, 1, length, fp); 11 if (size != length) { 12 printf(\"fwrite failed: %d\\n\", size); 13 return -3; 14 } 15 16 fclose(fp); 17 18 return size; 19 20} ",
+  "wordCount" : "2754",
+  "inLanguage": "zh",
+  "datePublished": "2025-11-25T22:59:02+08:00",
+  "dateModified": "2025-11-25T22:59:02+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Neil's Digital Garden",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://neilyuan0404.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://neilyuan0404.github.io/zh/" accesskey="h" title="Neil&#39;s Digital Garden (Alt + H)">Neil&#39;s Digital Garden</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                    <ul class="lang-switch"><li>|</li>
+                        <li>
+                            <a href="https://neilyuan0404.github.io/en/" title="English"
+                                aria-label="English">En</a>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/" title="Blogs">
+                    <span>Blogs</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://neilyuan0404.github.io/zh/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      C语言实现MySQL图片读写
+    </h1>
+    <div class="post-meta"><span title='2025-11-25 22:59:02 +0800 CST'>2025年11月25日</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h4 id="内容介绍">内容介绍<a hidden class="anchor" aria-hidden="true" href="#内容介绍">#</a></h4>
+<p><a href="https://github.com/NeilYuan0404/Toys/blob/main/Mysql.c">Github - C语言实现MySQL图片读写</a></p>
+<p>这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作<strong>图片的读写</strong>。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。</p>
+<h6 id="准备工作">准备工作<a hidden class="anchor" aria-hidden="true" href="#准备工作">#</a></h6>
+<ul>
+<li>UNIX或类UNIX操作系统</li>
+<li>配置好MySQL，尤其是和读写权限有关的配置</li>
+<li>C语言编程工具链gcc等</li>
+<li>MySQL与C的连接器 &mdash; libmysqlclient-dev</li>
+</ul>
+<h3 id="第一部分二进制数据读写">第一部分：二进制数据读写<a hidden class="anchor" aria-hidden="true" href="#第一部分二进制数据读写">#</a></h3>
+<p><strong>一、打印</strong></p>
+<p>下面这个函数实现了打印我们的需要的表当中的所有数据。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Mysql.c" data-lang="Mysql.c"><span class="line"><span class="ln"> 1</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="kt">int</span> <span class="nf">neil_mysql_select</span><span class="p">(</span><span class="n">MYSQL</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nf">mysql_real_query</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">SQL_SELECT_TBL_USER</span><span class="p">,</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">SQL_SELECT_TBL_USER</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mysql_real_query: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">mysql_error</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">  <span class="n">MYSQL_RES</span> <span class="o">*</span><span class="n">res</span> <span class="o">=</span> <span class="nf">mysql_store_result</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mysql_real_query: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">mysql_error</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">  <span class="kt">int</span> <span class="n">rows</span> <span class="o">=</span> <span class="nf">mysql_num_rows</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;rows: %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">rows</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">  <span class="kt">int</span> <span class="n">fields</span> <span class="o">=</span> <span class="nf">mysql_num_fields</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;fields: %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">fields</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl">  <span class="c1">//取出并且显示结果
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl">  <span class="n">MYSQL_ROW</span> <span class="n">row</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">  <span class="k">while</span> <span class="p">((</span><span class="n">row</span> <span class="o">=</span> <span class="nf">mysql_fetch_row</span><span class="p">(</span><span class="n">res</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">fields</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">      <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%s</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">  
+</span></span><span class="line"><span class="ln">30</span><span class="cl">  
+</span></span><span class="line"><span class="ln">31</span><span class="cl">  <span class="nf">mysql_free_result</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">
+</span></span><span class="line"><span class="ln">33</span><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span></code></pre></div><p><strong>技术阐释：</strong>
-上面实现的函数中传递了一个特别的参数叫做<code>handle</code>，名字叫做数据库连接句柄。有了它，我们才可以从NS连接到数据库，并且进行我们想要的操作，并且当操作不成功的时候，他可以通过<code>mysql_error(handle)</code>返回错误值。</p><p>第一个涉及到的mysql函数就是mysql_real_query()，这个函数可用于实现SQL查询，它接受handle，和我们所要执行的SQl查询语句，还有长度作为参数。之后我们就会看到为了实现SQL还有一个不同的办法， 叫做预处理语句。</p><p>第13行和16行的这两个函数分别是为了获取行和列的数目。</p><p>代码第21行这个while循环，就是不断地从我们想要的表中读取数据行，并且显示结果。</p><p>mysql_free_result(res)用于释放我们查询所占用的内存空间<code>res</code>。比较值的说的是这个res是我们在第7行创建的，用于存储我们查询所得的结果。</p><p><strong>二、写入</strong></p><p>下面这一个函数实现了<strong>二进制数据</strong>的写入。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=ln> 1</span><span class=cl>
-</span></span><span class=line><span class=ln> 2</span><span class=cl>int mysql_write(MYSQL *handle, char *buffer, int length) {
-</span></span><span class=line><span class=ln> 3</span><span class=cl>
-</span></span><span class=line><span class=ln> 4</span><span class=cl> if(handle == NULL || buffer == NULL || length &lt;= 0) return -1;
-</span></span><span class=line><span class=ln> 5</span><span class=cl> //statement
-</span></span><span class=line><span class=ln> 6</span><span class=cl> MYSQL_STMT *stmt = mysql_stmt_init(handle);
-</span></span><span class=line><span class=ln> 7</span><span class=cl> int ret = mysql_stmt_prepare(stmt, SQL_INSERT_IMG_USER, strlen(SQL_INSERT_IMG_USER));
-</span></span><span class=line><span class=ln> 8</span><span class=cl> if (ret) {
-</span></span><span class=line><span class=ln> 9</span><span class=cl>   printf(&#34;mysql_stmt_prepar: %s\n&#34;, mysql_error(handle));
-</span></span><span class=line><span class=ln>10</span><span class=cl>   return -2;
-</span></span><span class=line><span class=ln>11</span><span class=cl> }
-</span></span><span class=line><span class=ln>12</span><span class=cl>
-</span></span><span class=line><span class=ln>13</span><span class=cl> MYSQL_BIND param = {0};
-</span></span><span class=line><span class=ln>14</span><span class=cl> param.buffer_type = MYSQL_TYPE_LONG_BLOB;
-</span></span><span class=line><span class=ln>15</span><span class=cl> param.buffer = NULL;
-</span></span><span class=line><span class=ln>16</span><span class=cl> param.is_null = 0;
-</span></span><span class=line><span class=ln>17</span><span class=cl> param.length = NULL;
-</span></span><span class=line><span class=ln>18</span><span class=cl>
-</span></span><span class=line><span class=ln>19</span><span class=cl> ret = mysql_stmt_bind_param(stmt, &amp;param);
-</span></span><span class=line><span class=ln>20</span><span class=cl> if (ret) {
-</span></span><span class=line><span class=ln>21</span><span class=cl>   printf(&#34;mysql_stmt_bind_param: %s\n&#34;, mysql_error(handle));
-</span></span><span class=line><span class=ln>22</span><span class=cl>   return -3;
-</span></span><span class=line><span class=ln>23</span><span class=cl> }
-</span></span><span class=line><span class=ln>24</span><span class=cl> //分段将数据发到服务器
-</span></span><span class=line><span class=ln>25</span><span class=cl> ret = mysql_stmt_send_long_data(stmt, 0, buffer, length);
-</span></span><span class=line><span class=ln>26</span><span class=cl>   if (ret) {      
-</span></span><span class=line><span class=ln>27</span><span class=cl>     printf(&#34;mysql_stmt_send_long_data: %s\n&#34;, mysql_error(handle));
-</span></span><span class=line><span class=ln>28</span><span class=cl>     return -4;  
-</span></span><span class=line><span class=ln>29</span><span class=cl>   }
-</span></span><span class=line><span class=ln>30</span><span class=cl> //执行：插入到服务器里
-</span></span><span class=line><span class=ln>31</span><span class=cl> ret = mysql_stmt_execute(stmt);
-</span></span><span class=line><span class=ln>32</span><span class=cl> if (ret) {
-</span></span><span class=line><span class=ln>33</span><span class=cl>   printf(&#34;mysql_stmt_execute: %s\n&#34;, mysql_error(handle));
-</span></span><span class=line><span class=ln>34</span><span class=cl>   return -5;  
-</span></span><span class=line><span class=ln>35</span><span class=cl> }
-</span></span><span class=line><span class=ln>36</span><span class=cl> //关闭
-</span></span><span class=line><span class=ln>37</span><span class=cl> ret = mysql_stmt_close(stmt);
-</span></span><span class=line><span class=ln>38</span><span class=cl> if (ret) {
-</span></span><span class=line><span class=ln>39</span><span class=cl>   printf(&#34;mysql_stmt_close: %s\n&#34;, mysql_error(handle));
-</span></span><span class=line><span class=ln>40</span><span class=cl>   return -6;  
-</span></span><span class=line><span class=ln>41</span><span class=cl> }
-</span></span><span class=line><span class=ln>42</span><span class=cl>
-</span></span><span class=line><span class=ln>43</span><span class=cl> return ret;
-</span></span><span class=line><span class=ln>44</span><span class=cl>}
-</span></span></code></pre></div><p><strong>技术阐释</strong>：同样是为了实现SQL语句，与之前说过的mysql_real_query相对，在以上代码的第6行，有一个比较特别的<strong>预处理语句句柄</strong>的定义&mdash;statment，预处理语句使用场景</p><ul><li><strong>安全性</strong>：有效防止注入攻击</li><li><strong>高性能</strong>：重复的查询，亦只需要一次编译</li><li><strong>二进制数据</strong>：更好支持大二进制数据类型BLOB</li></ul><p>使用预处理语句可以减少输入的风险，并且减少网络传递负担。并且因为这些优点，预处理语句更加频繁的出现在实际使用当中。</p><p>我们之前使用的mysql_real_query实现简单便于调试，比较适合一次性的查询，比如我们之前查完就释放掉了内存空间。</p><p>SQL当中实现插入的语句当然是insert，我们在Mysql.c的最开始使用<code>#define</code>定义了它：<code>#define SQL_INSERT_IMG_USER "insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);"</code>，和其他SQL语句一样，我们这样定义是为了方便在下面的代码当中引用。</p><p>值得注意的是，对于u_img这个列而言，我们想要插入的数据是图片，可是图片并不是一个普通的字符串数据，图片数据的大小非常大，回想之前我们提到过的办法&mdash;将他转化为<strong>二进制文件，分段发送</strong>，这就是我们上面这个函数的思路。</p><p>以上代码的第13～17行定义了一个<code>MYSQL_BIND</code>，这是为了提前告诉服务器所需要传递参数的类型。因为我们在传递参数的时候使用的是<code>SQL_INSERT_IMG_USER "insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);</code>而最后面这个<code>?</code>是需要bind的内容。13～17行的作用依次为：</p><p>MYSQL_BIND参数说明：</p><ul><li><code>buffer_type = MYSQL_TYPE_LONG_BLOB</code> - 指定参数为二进制大对象类型</li><li><code>buffer = NULL</code> - 不直接提供数据缓冲区，使用分段发送</li><li><code>is_null = 0</code> - 明确表示该参数不是NULL值</li><li><code>length = NULL</code> - 长度信息将在<code>mysql_stmt_send_long_data</code>中提供</li></ul><p>之后的代码就是将预处理的语句statement执行，即分段发送二进制数据，完成后关闭statement。</p><p><strong>三、读出</strong></p><p>以下函数实现了二进制数据的读出，整体来看，结构和之前的二进制数据写入差不多，值得注意的是，38行的while（1）是为了处理多行数据，而其中的内层循环是为了从服务器接收分段的数据进入buffer，并且验证数据是否有丢失（<code>MYSQL_DATA_TRUNCATED</code>）</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Mysql.c data-lang=Mysql.c><span class=line><span class=ln> 1</span><span class=cl><span class=c1>//从数据库中读取出来
-</span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=kt>int</span> <span class=nf>mysql_read</span><span class=p>(</span><span class=n>MYSQL</span> <span class=o>*</span><span class=n>handle</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>buffer</span><span class=p>,</span> <span class=kt>int</span> <span class=n>length</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 3</span><span class=cl>  <span class=k>if</span><span class=p>(</span><span class=n>handle</span> <span class=o>==</span> <span class=nb>NULL</span> <span class=o>||</span> <span class=n>buffer</span> <span class=o>==</span> <span class=nb>NULL</span> <span class=o>||</span> <span class=n>length</span> <span class=o>&lt;=</span> <span class=mi>0</span><span class=p>)</span> <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=ln> 4</span><span class=cl>  
-</span></span><span class=line><span class=ln> 5</span><span class=cl>  <span class=n>MYSQL_STMT</span> <span class=o>*</span><span class=n>stmt</span> <span class=o>=</span> <span class=nf>mysql_stmt_init</span><span class=p>(</span><span class=n>handle</span><span class=p>);</span>
-</span></span><span class=line><span class=ln> 6</span><span class=cl>  <span class=kt>int</span> <span class=n>ret</span> <span class=o>=</span> <span class=nf>mysql_stmt_prepare</span><span class=p>(</span><span class=n>stmt</span><span class=p>,</span> <span class=n>SQL_SELECT_IMG_USER</span><span class=p>,</span> <span class=nf>strlen</span><span class=p>(</span><span class=n>SQL_SELECT_IMG_USER</span><span class=p>));</span>
-</span></span><span class=line><span class=ln> 7</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>ret</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 8</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;mysql_stmt_prepar: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>mysql_error</span><span class=p>(</span><span class=n>handle</span><span class=p>));</span>
-</span></span><span class=line><span class=ln> 9</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>2</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>10</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>11</span><span class=cl>
-</span></span><span class=line><span class=ln>12</span><span class=cl>  
-</span></span><span class=line><span class=ln>13</span><span class=cl>  <span class=n>MYSQL_BIND</span> <span class=n>result</span> <span class=o>=</span> <span class=p>{</span><span class=mi>0</span><span class=p>};</span>
-</span></span><span class=line><span class=ln>14</span><span class=cl>
-</span></span><span class=line><span class=ln>15</span><span class=cl>  
-</span></span><span class=line><span class=ln>16</span><span class=cl>  <span class=n>result</span><span class=p>.</span><span class=n>buffer_type</span> <span class=o>=</span> <span class=n>MYSQL_TYPE_LONG_BLOB</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>17</span><span class=cl>  <span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>total_length</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>18</span><span class=cl>  <span class=n>result</span><span class=p>.</span><span class=n>length</span> <span class=o>=</span> <span class=o>&amp;</span><span class=n>total_length</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>19</span><span class=cl>
-</span></span><span class=line><span class=ln>20</span><span class=cl>  <span class=n>ret</span> <span class=o>=</span> <span class=nf>mysql_stmt_bind_result</span><span class=p>(</span><span class=n>stmt</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>result</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>21</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>ret</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>22</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;mysql_stmt_bind_result: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>mysql_error</span><span class=p>(</span><span class=n>handle</span><span class=p>));</span>
-</span></span><span class=line><span class=ln>23</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>3</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>24</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>25</span><span class=cl>  
-</span></span><span class=line><span class=ln>26</span><span class=cl>  <span class=n>ret</span> <span class=o>=</span> <span class=nf>mysql_stmt_execute</span><span class=p>(</span><span class=n>stmt</span><span class=p>);</span>  
-</span></span><span class=line><span class=ln>27</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>ret</span><span class=p>)</span> <span class=p>{</span>      
-</span></span><span class=line><span class=ln>28</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;mysql_stmt_execute: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>mysql_error</span><span class=p>(</span><span class=n>handle</span><span class=p>));</span>
-</span></span><span class=line><span class=ln>29</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>4</span><span class=p>;</span>  
-</span></span><span class=line><span class=ln>30</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>31</span><span class=cl>
-</span></span><span class=line><span class=ln>32</span><span class=cl>  <span class=n>ret</span> <span class=o>=</span> <span class=nf>mysql_stmt_store_result</span><span class=p>(</span><span class=n>stmt</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>33</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>ret</span><span class=p>)</span> <span class=p>{</span>      
-</span></span><span class=line><span class=ln>34</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;mysql_stmt_store_result: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>mysql_error</span><span class=p>(</span><span class=n>handle</span><span class=p>));</span>
-</span></span><span class=line><span class=ln>35</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>5</span><span class=p>;</span>  
-</span></span><span class=line><span class=ln>36</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>37</span><span class=cl>  <span class=c1>//多个数据
-</span></span></span><span class=line><span class=ln>38</span><span class=cl>  <span class=k>while</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>39</span><span class=cl>    <span class=n>ret</span> <span class=o>=</span> <span class=nf>mysql_stmt_fetch</span><span class=p>(</span><span class=n>stmt</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>40</span><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>ret</span> <span class=o>!=</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=n>ret</span> <span class=o>!=</span> <span class=n>MYSQL_DATA_TRUNCATED</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>41</span><span class=cl>      <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>42</span><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=ln>43</span><span class=cl>    <span class=kt>int</span> <span class=n>start</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>44</span><span class=cl>    <span class=c1>//内层循环
-</span></span></span><span class=line><span class=ln>45</span><span class=cl>    <span class=k>while</span><span class=p>(</span><span class=n>start</span> <span class=o>&lt;</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=n>total_length</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>46</span><span class=cl>      <span class=n>result</span><span class=p>.</span><span class=n>buffer</span> <span class=o>=</span> <span class=n>buffer</span> <span class=o>+</span> <span class=n>start</span><span class=p>;</span> <span class=c1>//结果集的buffer和存储图片的buffer是同一个
-</span></span></span><span class=line><span class=ln>47</span><span class=cl>      <span class=n>result</span><span class=p>.</span><span class=n>buffer_length</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>48</span><span class=cl>      <span class=nf>mysql_stmt_fetch_column</span><span class=p>(</span><span class=n>stmt</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>result</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>start</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>49</span><span class=cl>      <span class=n>start</span> <span class=o>+=</span> <span class=n>result</span><span class=p>.</span><span class=n>buffer_length</span><span class=p>;</span>      
-</span></span><span class=line><span class=ln>50</span><span class=cl>    <span class=p>}</span> 
-</span></span><span class=line><span class=ln>51</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>52</span><span class=cl>  <span class=nf>mysql_stmt_close</span><span class=p>(</span><span class=n>stmt</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>53</span><span class=cl>  <span class=k>return</span> <span class=n>total_length</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>54</span><span class=cl><span class=p>}</span>
-</span></span></code></pre></div><h3 id=第二部分图片读写>第二部分：图片读写<a hidden class=anchor aria-hidden=true href=#第二部分图片读写>#</a></h3><p>下面的目标是提供一个接口，用于在主函数main当中调用，可以直接操作我们想要的图片文件。</p><p><strong>一、图片写入</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Mysql.c data-lang=Mysql.c><span class=line><span class=ln> 1</span><span class=cl><span class=kt>int</span> <span class=nf>read_image</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>filename</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>buffer</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 2</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>filename</span> <span class=o>==</span> <span class=nb>NULL</span> <span class=o>||</span> <span class=n>buffer</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=ln> 3</span><span class=cl>  
-</span></span><span class=line><span class=ln> 4</span><span class=cl>    <span class=n>FILE</span> <span class=o>*</span><span class=n>fp</span> <span class=o>=</span> <span class=nf>fopen</span><span class=p>(</span><span class=n>filename</span><span class=p>,</span> <span class=s>&#34;rb&#34;</span><span class=p>);</span> <span class=c1>//fp指向文件的开头
-</span></span></span><span class=line><span class=ln> 5</span><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>fp</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 6</span><span class=cl>      <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;fopen failed</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
-</span></span><span class=line><span class=ln> 7</span><span class=cl>      <span class=k>return</span> <span class=o>-</span><span class=mi>2</span><span class=p>;</span>
-</span></span><span class=line><span class=ln> 8</span><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=ln> 9</span><span class=cl>
-</span></span><span class=line><span class=ln>10</span><span class=cl>    <span class=c1>//file size
-</span></span></span><span class=line><span class=ln>11</span><span class=cl>    <span class=c1>//下面这个函数将fp指向末尾
-</span></span></span><span class=line><span class=ln>12</span><span class=cl>    <span class=nf>fseek</span><span class=p>(</span><span class=n>fp</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>SEEK_END</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>13</span><span class=cl>    <span class=kt>int</span> <span class=n>length</span> <span class=o>=</span> <span class=nf>ftell</span><span class=p>(</span><span class=n>fp</span><span class=p>);</span><span class=c1>//偏移量
-</span></span></span><span class=line><span class=ln>14</span><span class=cl>    <span class=nf>fseek</span><span class=p>(</span><span class=n>fp</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>SEEK_SET</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>15</span><span class=cl>
-</span></span><span class=line><span class=ln>16</span><span class=cl>    <span class=kt>int</span> <span class=n>size</span> <span class=o>=</span> <span class=nf>fread</span><span class=p>(</span><span class=n>buffer</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>length</span><span class=p>,</span> <span class=n>fp</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>17</span><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>size</span> <span class=o>!=</span> <span class=n>length</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>18</span><span class=cl>      <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;fread failed:%d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>size</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>19</span><span class=cl>      <span class=k>return</span> <span class=o>-</span><span class=mi>3</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>20</span><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=ln>21</span><span class=cl>
-</span></span><span class=line><span class=ln>22</span><span class=cl>    <span class=nf>fclose</span><span class=p>(</span><span class=n>fp</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>23</span><span class=cl>
-</span></span><span class=line><span class=ln>24</span><span class=cl>    <span class=k>return</span> <span class=n>size</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>25</span><span class=cl><span class=p>}</span>
-</span></span></code></pre></div><p><strong>技术阐释</strong>：以上函数的作用就是从<code>filename</code>这个路径中获取我们想要的文件，并将其导入到buffer当中，然后，我们之前实现的二进制数据处理函数就可以顺利地从buffer当中找到需要发送到Mysql服务器的二进制图片数据。</p><p>你可能注意到了，从图片格式到二进制数据流这个转换的过程究竟是如何完成的？&mdash;答案是<code>fopen</code>，因为我们指定了一个fopen中的第二个参数为“rb”：</p><ul><li>r代表read only，只读</li><li>b代表二进制</li></ul><p>如果不指定b这个参数，则默认使用文本模式导入，一定要注意的是，图片格式一定不可以用文本模式导入，这会导致一些严重的格式问题，比如说换行符的转换。</p><p>文件模式说明：</p><ul><li><code>"rb"</code> - 二进制只读模式（图片读取）</li><li><code>"wb"</code> - 二进制只写模式，会清空原文件</li><li><code>"wb+"</code> - 二进制读写模式，会清空原文件
-对于图片保存，使用<code>"wb"</code>更为合适</li></ul><p><strong>二、图片读取</strong></p><p>几乎和图片写入对称，不多赘述。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Mysql.c data-lang=Mysql.c><span class=line><span class=ln> 1</span><span class=cl><span class=kt>int</span> <span class=nf>write_image</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>filename</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>buffer</span><span class=p>,</span> <span class=kt>int</span> <span class=n>length</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 2</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>filename</span> <span class=o>==</span> <span class=nb>NULL</span> <span class=o>||</span> <span class=n>buffer</span> <span class=o>==</span> <span class=nb>NULL</span> <span class=o>||</span> <span class=n>length</span> <span class=o>&lt;=</span> <span class=mi>0</span><span class=p>)</span> <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=ln> 3</span><span class=cl>
-</span></span><span class=line><span class=ln> 4</span><span class=cl>  <span class=n>FILE</span> <span class=o>*</span><span class=n>fp</span> <span class=o>=</span> <span class=nf>fopen</span><span class=p>(</span><span class=n>filename</span><span class=p>,</span> <span class=s>&#34;wb+&#34;</span><span class=p>);</span> <span class=c1>//fp指向文件的开头
-</span></span></span><span class=line><span class=ln> 5</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>fp</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln> 6</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;fopen failed</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
-</span></span><span class=line><span class=ln> 7</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>2</span><span class=p>;</span>
-</span></span><span class=line><span class=ln> 8</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln> 9</span><span class=cl>
-</span></span><span class=line><span class=ln>10</span><span class=cl>  <span class=kt>int</span> <span class=n>size</span> <span class=o>=</span> <span class=nf>fwrite</span><span class=p>(</span><span class=n>buffer</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>length</span><span class=p>,</span> <span class=n>fp</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>11</span><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>size</span> <span class=o>!=</span> <span class=n>length</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=ln>12</span><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;fwrite failed: %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>size</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>13</span><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=mi>3</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>14</span><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=ln>15</span><span class=cl>
-</span></span><span class=line><span class=ln>16</span><span class=cl>  <span class=nf>fclose</span><span class=p>(</span><span class=n>fp</span><span class=p>);</span>
-</span></span><span class=line><span class=ln>17</span><span class=cl>  
-</span></span><span class=line><span class=ln>18</span><span class=cl>  <span class=k>return</span> <span class=n>size</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>19</span><span class=cl>  
-</span></span><span class=line><span class=ln>20</span><span class=cl><span class=p>}</span>
-</span></span></code></pre></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://NeilYuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/>C语言</a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/mysql/>MySQL</a></li><li><a href=https://NeilYuan0404.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://NeilYuan0404.github.io/zh/>Home</a></span> ·
-<span>Powered by
-<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
-<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
-</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>
+上面实现的函数中传递了一个特别的参数叫做<code>handle</code>，名字叫做数据库连接句柄。有了它，我们才可以从NS连接到数据库，并且进行我们想要的操作，并且当操作不成功的时候，他可以通过<code>mysql_error(handle)</code>返回错误值。</p>
+<p>第一个涉及到的mysql函数就是mysql_real_query()，这个函数可用于实现SQL查询，它接受handle，和我们所要执行的SQl查询语句，还有长度作为参数。之后我们就会看到为了实现SQL还有一个不同的办法， 叫做预处理语句。</p>
+<p>第13行和16行的这两个函数分别是为了获取行和列的数目。</p>
+<p>代码第21行这个while循环，就是不断地从我们想要的表中读取数据行，并且显示结果。</p>
+<p>mysql_free_result(res)用于释放我们查询所占用的内存空间<code>res</code>。比较值的说的是这个res是我们在第7行创建的，用于存储我们查询所得的结果。</p>
+<p><strong>二、写入</strong></p>
+<p>下面这一个函数实现了<strong>二进制数据</strong>的写入。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">int mysql_write(MYSQL *handle, char *buffer, int length) {
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"> if(handle == NULL || buffer == NULL || length &lt;= 0) return -1;
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"> //statement
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"> MYSQL_STMT *stmt = mysql_stmt_init(handle);
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"> int ret = mysql_stmt_prepare(stmt, SQL_INSERT_IMG_USER, strlen(SQL_INSERT_IMG_USER));
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"> if (ret) {
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">   printf(&#34;mysql_stmt_prepar: %s\n&#34;, mysql_error(handle));
+</span></span><span class="line"><span class="ln">10</span><span class="cl">   return -2;
+</span></span><span class="line"><span class="ln">11</span><span class="cl"> }
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"> MYSQL_BIND param = {0};
+</span></span><span class="line"><span class="ln">14</span><span class="cl"> param.buffer_type = MYSQL_TYPE_LONG_BLOB;
+</span></span><span class="line"><span class="ln">15</span><span class="cl"> param.buffer = NULL;
+</span></span><span class="line"><span class="ln">16</span><span class="cl"> param.is_null = 0;
+</span></span><span class="line"><span class="ln">17</span><span class="cl"> param.length = NULL;
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl"> ret = mysql_stmt_bind_param(stmt, &amp;param);
+</span></span><span class="line"><span class="ln">20</span><span class="cl"> if (ret) {
+</span></span><span class="line"><span class="ln">21</span><span class="cl">   printf(&#34;mysql_stmt_bind_param: %s\n&#34;, mysql_error(handle));
+</span></span><span class="line"><span class="ln">22</span><span class="cl">   return -3;
+</span></span><span class="line"><span class="ln">23</span><span class="cl"> }
+</span></span><span class="line"><span class="ln">24</span><span class="cl"> //分段将数据发到服务器
+</span></span><span class="line"><span class="ln">25</span><span class="cl"> ret = mysql_stmt_send_long_data(stmt, 0, buffer, length);
+</span></span><span class="line"><span class="ln">26</span><span class="cl">   if (ret) {      
+</span></span><span class="line"><span class="ln">27</span><span class="cl">     printf(&#34;mysql_stmt_send_long_data: %s\n&#34;, mysql_error(handle));
+</span></span><span class="line"><span class="ln">28</span><span class="cl">     return -4;  
+</span></span><span class="line"><span class="ln">29</span><span class="cl">   }
+</span></span><span class="line"><span class="ln">30</span><span class="cl"> //执行：插入到服务器里
+</span></span><span class="line"><span class="ln">31</span><span class="cl"> ret = mysql_stmt_execute(stmt);
+</span></span><span class="line"><span class="ln">32</span><span class="cl"> if (ret) {
+</span></span><span class="line"><span class="ln">33</span><span class="cl">   printf(&#34;mysql_stmt_execute: %s\n&#34;, mysql_error(handle));
+</span></span><span class="line"><span class="ln">34</span><span class="cl">   return -5;  
+</span></span><span class="line"><span class="ln">35</span><span class="cl"> }
+</span></span><span class="line"><span class="ln">36</span><span class="cl"> //关闭
+</span></span><span class="line"><span class="ln">37</span><span class="cl"> ret = mysql_stmt_close(stmt);
+</span></span><span class="line"><span class="ln">38</span><span class="cl"> if (ret) {
+</span></span><span class="line"><span class="ln">39</span><span class="cl">   printf(&#34;mysql_stmt_close: %s\n&#34;, mysql_error(handle));
+</span></span><span class="line"><span class="ln">40</span><span class="cl">   return -6;  
+</span></span><span class="line"><span class="ln">41</span><span class="cl"> }
+</span></span><span class="line"><span class="ln">42</span><span class="cl">
+</span></span><span class="line"><span class="ln">43</span><span class="cl"> return ret;
+</span></span><span class="line"><span class="ln">44</span><span class="cl">}
+</span></span></code></pre></div><p><strong>技术阐释</strong>：同样是为了实现SQL语句，与之前说过的mysql_real_query相对，在以上代码的第6行，有一个比较特别的<strong>预处理语句句柄</strong>的定义&mdash;statment，预处理语句使用场景</p>
+<ul>
+<li><strong>安全性</strong>：有效防止注入攻击</li>
+<li><strong>高性能</strong>：重复的查询，亦只需要一次编译</li>
+<li><strong>二进制数据</strong>：更好支持大二进制数据类型BLOB</li>
+</ul>
+<p>使用预处理语句可以减少输入的风险，并且减少网络传递负担。并且因为这些优点，预处理语句更加频繁的出现在实际使用当中。</p>
+<p>我们之前使用的mysql_real_query实现简单便于调试，比较适合一次性的查询，比如我们之前查完就释放掉了内存空间。</p>
+<p>SQL当中实现插入的语句当然是insert，我们在Mysql.c的最开始使用<code>#define</code>定义了它：<code>#define SQL_INSERT_IMG_USER &quot;insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);&quot;</code>，和其他SQL语句一样，我们这样定义是为了方便在下面的代码当中引用。</p>
+<p>值得注意的是，对于u_img这个列而言，我们想要插入的数据是图片，可是图片并不是一个普通的字符串数据，图片数据的大小非常大，回想之前我们提到过的办法&mdash;将他转化为<strong>二进制文件，分段发送</strong>，这就是我们上面这个函数的思路。</p>
+<p>以上代码的第13～17行定义了一个<code>MYSQL_BIND</code>，这是为了提前告诉服务器所需要传递参数的类型。因为我们在传递参数的时候使用的是<code>SQL_INSERT_IMG_USER &quot;insert tbl_user(u_name, u_gender, u_img) value('Alice', 'female', ?);</code>而最后面这个<code>?</code>是需要bind的内容。13～17行的作用依次为：</p>
+<p>MYSQL_BIND参数说明：</p>
+<ul>
+<li><code>buffer_type = MYSQL_TYPE_LONG_BLOB</code> - 指定参数为二进制大对象类型</li>
+<li><code>buffer = NULL</code> - 不直接提供数据缓冲区，使用分段发送</li>
+<li><code>is_null = 0</code> - 明确表示该参数不是NULL值</li>
+<li><code>length = NULL</code> - 长度信息将在<code>mysql_stmt_send_long_data</code>中提供</li>
+</ul>
+<p>之后的代码就是将预处理的语句statement执行，即分段发送二进制数据，完成后关闭statement。</p>
+<p><strong>三、读出</strong></p>
+<p>以下函数实现了二进制数据的读出，整体来看，结构和之前的二进制数据写入差不多，值得注意的是，38行的while（1）是为了处理多行数据，而其中的内层循环是为了从服务器接收分段的数据进入buffer，并且验证数据是否有丢失（<code>MYSQL_DATA_TRUNCATED</code>）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Mysql.c" data-lang="Mysql.c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">//从数据库中读取出来
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="kt">int</span> <span class="nf">mysql_read</span><span class="p">(</span><span class="n">MYSQL</span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">buffer</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">  
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">  <span class="n">MYSQL_STMT</span> <span class="o">*</span><span class="n">stmt</span> <span class="o">=</span> <span class="nf">mysql_stmt_init</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">  <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="nf">mysql_stmt_prepare</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="n">SQL_SELECT_IMG_USER</span><span class="p">,</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">SQL_SELECT_IMG_USER</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mysql_stmt_prepar: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">mysql_error</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">
+</span></span><span class="line"><span class="ln">12</span><span class="cl">  
+</span></span><span class="line"><span class="ln">13</span><span class="cl">  <span class="n">MYSQL_BIND</span> <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">  
+</span></span><span class="line"><span class="ln">16</span><span class="cl">  <span class="n">result</span><span class="p">.</span><span class="n">buffer_type</span> <span class="o">=</span> <span class="n">MYSQL_TYPE_LONG_BLOB</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">  <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">total_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">  <span class="n">result</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">total_length</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">  <span class="n">ret</span> <span class="o">=</span> <span class="nf">mysql_stmt_bind_result</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mysql_stmt_bind_result: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">mysql_error</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">  
+</span></span><span class="line"><span class="ln">26</span><span class="cl">  <span class="n">ret</span> <span class="o">=</span> <span class="nf">mysql_stmt_execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">);</span>  
+</span></span><span class="line"><span class="ln">27</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="p">{</span>      
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mysql_stmt_execute: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">mysql_error</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span>  
+</span></span><span class="line"><span class="ln">30</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">
+</span></span><span class="line"><span class="ln">32</span><span class="cl">  <span class="n">ret</span> <span class="o">=</span> <span class="nf">mysql_stmt_store_result</span><span class="p">(</span><span class="n">stmt</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="p">{</span>      
+</span></span><span class="line"><span class="ln">34</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mysql_stmt_store_result: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">mysql_error</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">5</span><span class="p">;</span>  
+</span></span><span class="line"><span class="ln">36</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl">  <span class="c1">//多个数据
+</span></span></span><span class="line"><span class="ln">38</span><span class="cl">  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="nf">mysql_stmt_fetch</span><span class="p">(</span><span class="n">stmt</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ret</span> <span class="o">!=</span> <span class="n">MYSQL_DATA_TRUNCATED</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl">    <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl">    <span class="c1">//内层循环
+</span></span></span><span class="line"><span class="ln">45</span><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">total_length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl">      <span class="n">result</span><span class="p">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">buffer</span> <span class="o">+</span> <span class="n">start</span><span class="p">;</span> <span class="c1">//结果集的buffer和存储图片的buffer是同一个
+</span></span></span><span class="line"><span class="ln">47</span><span class="cl">      <span class="n">result</span><span class="p">.</span><span class="n">buffer_length</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">48</span><span class="cl">      <span class="nf">mysql_stmt_fetch_column</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">49</span><span class="cl">      <span class="n">start</span> <span class="o">+=</span> <span class="n">result</span><span class="p">.</span><span class="n">buffer_length</span><span class="p">;</span>      
+</span></span><span class="line"><span class="ln">50</span><span class="cl">    <span class="p">}</span> 
+</span></span><span class="line"><span class="ln">51</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">52</span><span class="cl">  <span class="nf">mysql_stmt_close</span><span class="p">(</span><span class="n">stmt</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">53</span><span class="cl">  <span class="k">return</span> <span class="n">total_length</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">54</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="第二部分图片读写">第二部分：图片读写<a hidden class="anchor" aria-hidden="true" href="#第二部分图片读写">#</a></h3>
+<p>下面的目标是提供一个接口，用于在主函数main当中调用，可以直接操作我们想要的图片文件。</p>
+<p><strong>一、图片写入</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Mysql.c" data-lang="Mysql.c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kt">int</span> <span class="nf">read_image</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">filename</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">buffer</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">  
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="n">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#34;rb&#34;</span><span class="p">);</span> <span class="c1">//fp指向文件的开头
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">      <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;fopen failed</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">      <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="c1">//file size
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="c1">//下面这个函数将fp指向末尾
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="nf">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_END</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="nf">ftell</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="c1">//偏移量
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="nf">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_SET</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="nf">fread</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">fp</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">!=</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">      <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;fread failed:%d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">      <span class="k">return</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="nf">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">return</span> <span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><strong>技术阐释</strong>：以上函数的作用就是从<code>filename</code>这个路径中获取我们想要的文件，并将其导入到buffer当中，然后，我们之前实现的二进制数据处理函数就可以顺利地从buffer当中找到需要发送到Mysql服务器的二进制图片数据。</p>
+<p>你可能注意到了，从图片格式到二进制数据流这个转换的过程究竟是如何完成的？&mdash;答案是<code>fopen</code>，因为我们指定了一个fopen中的第二个参数为“rb”：</p>
+<ul>
+<li>r代表read only，只读</li>
+<li>b代表二进制</li>
+</ul>
+<p>如果不指定b这个参数，则默认使用文本模式导入，一定要注意的是，图片格式一定不可以用文本模式导入，这会导致一些严重的格式问题，比如说换行符的转换。</p>
+<p>文件模式说明：</p>
+<ul>
+<li><code>&quot;rb&quot;</code> - 二进制只读模式（图片读取）</li>
+<li><code>&quot;wb&quot;</code> - 二进制只写模式，会清空原文件</li>
+<li><code>&quot;wb+&quot;</code> - 二进制读写模式，会清空原文件
+对于图片保存，使用<code>&quot;wb&quot;</code>更为合适</li>
+</ul>
+<p><strong>二、图片读取</strong></p>
+<p>几乎和图片写入对称，不多赘述。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Mysql.c" data-lang="Mysql.c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kt">int</span> <span class="nf">write_image</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">filename</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">buffer</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">  <span class="n">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#34;wb+&#34;</span><span class="p">);</span> <span class="c1">//fp指向文件的开头
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;fopen failed</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl">  <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="nf">fwrite</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">fp</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">!=</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;fwrite failed: %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">  <span class="nf">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">  
+</span></span><span class="line"><span class="ln">18</span><span class="cl">  <span class="k">return</span> <span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">  
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://neilyuan0404.github.io/zh/tags/c%E8%AF%AD%E8%A8%80/">C语言</a></li>
+      <li><a href="https://neilyuan0404.github.io/zh/tags/mysql/">MySQL</a></li>
+      <li><a href="https://neilyuan0404.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://neilyuan0404.github.io/zh/">Neil&#39;s Digital Garden</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
