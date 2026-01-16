@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UDP on Neil的数字花园</title>
+    <link>https://neilyuan0404.github.io/tags/udp/</link>
+    <description>Recent content in UDP on Neil的数字花园</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 25 Dec 2025 00:38:32 +0800</lastBuildDate>
+    <atom:link href="https://neilyuan0404.github.io/tags/udp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>用UDP实现向DNS服务器请求IP地址</title>
+      <link>https://neilyuan0404.github.io/zh/blog/udp/</link>
+      <pubDate>Thu, 25 Dec 2025 00:38:32 +0800</pubDate>
+      <guid>https://neilyuan0404.github.io/zh/blog/udp/</guid>
+      <description>&lt;p&gt;IP地址是网络层通信的基础，但是并不方便人类记忆，所以需要DNS域名系统来实现将IP地址和DNS之间的解析，简单来说，域名解析分为两个关键步骤：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

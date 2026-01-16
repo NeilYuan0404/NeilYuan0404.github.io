@@ -1,0 +1,131 @@
+baseURL: "https://neilyuan0404.github.io"
+title: "Neil's Digital Garden"
+theme: "hugo-paperMod"
+languageCode: "zh-cn"
+defaultContentLanguage: "en"
+defaultContentLanguageInSubdir: true
+hasCJKLanguage: true
+
+# 启用标签
+taxonomies:
+  tag: tags
+  
+params:
+  displayLangSwitcher: true
+  languageSwitcher:
+    show: true
+    position: "nav"
+    
+markup:
+  highlight:
+    codeFences: true
+    guessSyntax: true
+    style: "github-light"
+    lineNos: true
+    lineNumbersInTable: false
+    noClasses: false
+    hl_Lines: ""
+    anchorLineNos: false
+    lineAnchors: ""
+  goldmark:
+    renderer:
+      unsafe: true
+
+languages:
+  zh:
+    languageName: "中文"
+    languageCode: "zh-cn"
+    contentDir: "content/zh"
+    weight: 1
+    
+    menu:
+      main:
+        - identifier: Blogs
+          name: Blogs
+          url: /zh/
+          weight: 10
+        
+        - identifier: tags
+          name: Tags
+          url: /zh/tags/
+          weight: 20
+        
+        - identifier: archives
+          name: Archives
+          url: /zh/archives/
+          weight: 30
+        
+        - identifier: about
+          name: About
+          url: /zh/about/
+          weight: 40
+    
+    params:
+      color: "linen"
+      background: "#f8f9fa"
+      
+      homeInfoParams:
+        Title: "Neil的博客"
+        Content: "求知若渴，虚心若愚。"
+      
+      socialIcons:
+        - name: github
+          url: "https://github.com/NeilYuan0404"
+        - name: instagram
+          url: "https://instagram.com/neilyuan0404"
+        - name: email
+          url: "neilyuan0404@gmail.com"
+  
+  en:
+    languageName: "English"
+    languageCode: "en"
+    contentDir: "content/en"
+    weight: 2
+    
+    menu:
+      main:
+        - identifier: home
+          name: Home
+          url: /en/
+          weight: 10
+        
+        - identifier: projects
+          name: Projects
+          url: /en/projects/
+          weight: 20
+        
+        - identifier: about
+          name: About
+          url: /en/about/
+          weight: 30
+    
+    params:
+      color: "linen"
+      background: "#f8f9fa"
+      
+      profileMode:
+        enabled: true
+        title: "Neil"
+        subtitle: "Stay hungry, stay foolish."
+        imageUrl: ""
+        
+        # 添加两个按钮
+        buttons:
+          - name: "Blogs(中文)"
+            url: "/zh/blog"
+          - name: "Projects"
+            url: "/en/projects/"
+        
+        
+      socialIcons:
+        - name: github
+          url: "https://github.com/NeilYuan0404"
+        - name: instagram
+          url: "https://instagram.com/neilyuan0404"
+        - name: email
+          url: "neilyuan0404@gmail.com"
+
+
+
+pagination:
+  pagerSize: 8

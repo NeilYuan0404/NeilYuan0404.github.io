@@ -236,16 +236,16 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">C语言实现MySQL图片读写
+    <h2 class="entry-hint-parent">Mysql实战——二进制数据读写
     </h2>
   </header>
   <div class="entry-content">
-    <p>内容介绍 Github - C语言实现MySQL图片读写
-这篇博客的内容是手把手带你实现一个基于C的MySQL数据库连接组件，一般用于节点服务器（NS）中，操作图片的读写。主要思路是先用C语言（mysql.h）搭建起基本数据读写的功能，然后将图片文件转化为二进制数据，并且分段发送，从而实现读写功能。
+    <p>Mysql提供了许多C API函数，借此我们可以使用实现一个客户端（位于NS）用于对mysql进行增删查改，最终实现图片数据的读写访问功能
+一、增删查改 几个常见SQL语句
 ...</p>
   </div>
   <footer class="entry-footer"><span title='2025-11-25 22:59:02 +0800 CST'>2025年11月25日</span></footer>
-  <a class="entry-link" aria-label="post link to C语言实现MySQL图片读写" href="https://neilyuan0404.github.io/zh/blog/read_write_images_mysql/"></a>
+  <a class="entry-link" aria-label="post link to Mysql实战——二进制数据读写" href="https://neilyuan0404.github.io/zh/blog/mysql_blob/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -254,8 +254,8 @@
     </h2>
   </header>
   <div class="entry-content">
-    <p>内容简介 1.线程池介绍：
-当客户端并发请求服务器的时候，服务器的响应是通过创建线程的方式来实现的。但是当并发的请求过于密集的时候，比如同时有十万个客户端请求服务，创建这些线程的开销是不可接受的：按照POSIX标准，一个线程占用8M的空间， 也就是说1G（1024M）的内存只能接受创建128个线程，假设一个服务器的内存是16G，同时也只能够接受创建2048个线程。这对于十万个客户端请求来说，简直是杯水车薪。所以我们需要—-线程池。
+    <p>一、底层数据结构 线程池是一个服务器的基础组件，由任务队列（等待处理的任务）、工作队列（实际上的线程池）、管理组件所组成。
+1.1 任务队列和工作队列 定义两个双向链表来分别实现任务队列和工作队列。任务队列当中需要定义一个指针函数，用于回调执行任务的函数入口。工作队列当中定义了一个int terminate，作用是当线程中的工作已经完成，将其置位以打破循环退出。
 ...</p>
   </div>
   <footer class="entry-footer"><span title='2025-11-21 12:29:21 +0800 CST'>2025年11月21日</span></footer>
@@ -304,6 +304,12 @@
   <footer class="entry-footer"><span title='2025-11-09 12:27:31 +0800 CST'>2025年11月9日</span></footer>
   <a class="entry-link" aria-label="post link to CSAPP：ProxyLab讲解与实现" href="https://neilyuan0404.github.io/zh/blog/proxylab/"></a>
 </article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="next" href="https://neilyuan0404.github.io/zh/page/2/">下一页&nbsp;&nbsp;»
+    </a>
+  </nav>
+</footer>
     </main>
     
 <footer class="footer">
