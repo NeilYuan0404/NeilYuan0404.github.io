@@ -4,10 +4,19 @@
     <title>网络编程 on Neil&#39;s Digital Garden</title>
     <link>https://neilyuan0404.github.io/zh/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</link>
     <description>Recent content in 网络编程 on Neil&#39;s Digital Garden</description>
-    <generator>Hugo -- 0.153.4</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 13 Jan 2026 17:49:32 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 18 Jan 2026 17:38:32 +0800</lastBuildDate>
     <atom:link href="https://neilyuan0404.github.io/zh/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>用epoll实现一个TCP服务器</title>
+      <link>https://neilyuan0404.github.io/zh/blog/epolltcpserver/</link>
+      <pubDate>Sun, 18 Jan 2026 17:38:32 +0800</pubDate>
+      <guid>https://neilyuan0404.github.io/zh/blog/epolltcpserver/</guid>
+      <description>&lt;h2 id=&#34;一了解epoll&#34;&gt;一、了解epoll&lt;/h2&gt;
+&lt;p&gt;关于I/O多路复用（epoll）
+epoll的核心优势在于其&lt;strong&gt;高效的数据结构&lt;/strong&gt;：使用红黑树来管理全部需要监控的描述符（简称为整fd集）、双向链表来管理已就绪的描述符（就绪fd集），并且在事件就绪的时候由内核直接通知用户空间，避免不必要的内存复制。支持水平触发LT和边沿触发ET，值得注意的是边沿触发ET：仅在fd状态发生变化的时候通知一次，避免了事件的重复触发，需要配合&lt;strong&gt;I/O非阻塞&lt;/strong&gt;处理使用。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>简述Reactor原理</title>
       <link>https://neilyuan0404.github.io/zh/blog/reactor/</link>

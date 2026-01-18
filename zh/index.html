@@ -2,7 +2,7 @@
 <html lang="zh" dir="auto" data-theme="auto">
 
 <head>
-	<meta name="generator" content="Hugo 0.153.4"><meta charset="utf-8">
+	<meta name="generator" content="Hugo 0.154.5"><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
@@ -197,6 +197,19 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">用epoll实现一个TCP服务器
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>一、了解epoll 关于I/O多路复用（epoll） epoll的核心优势在于其高效的数据结构：使用红黑树来管理全部需要监控的描述符（简称为整fd集）、双向链表来管理已就绪的描述符（就绪fd集），并且在事件就绪的时候由内核直接通知用户空间，避免不必要的内存复制。支持水平触发LT和边沿触发ET，值得注意的是边沿触发ET：仅在fd状态发生变化的时候通知一次，避免了事件的重复触发，需要配合I/O非阻塞处理使用。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-01-18 17:38:32 +0800 CST'>2026年1月18日</span></footer>
+  <a class="entry-link" aria-label="post link to 用epoll实现一个TCP服务器" href="https://neilyuan0404.github.io/zh/blog/epolltcpserver/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">简述Reactor原理
     </h2>
   </header>
@@ -288,21 +301,6 @@
   </div>
   <footer class="entry-footer"><span title='2025-11-14 22:48:24 +0800 CST'>2025年11月14日</span></footer>
   <a class="entry-link" aria-label="post link to 使用shell查看当前局域网宕机的IP地址" href="https://neilyuan0404.github.io/zh/blog/check_ip_shell/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">CSAPP：ProxyLab讲解与实现
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>纸上得来终觉浅，绝知此事要躬行。
-内容介绍 一、（已更）从CS:APP ProxyLab这辆玩具车出发 Github - Naive-Proxy的实现
-二、（已更）尝试改进玩具车Proxy：线程与I/O复用 Github - Mature-Proxy的实现
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-09 12:27:31 +0800 CST'>2025年11月9日</span></footer>
-  <a class="entry-link" aria-label="post link to CSAPP：ProxyLab讲解与实现" href="https://neilyuan0404.github.io/zh/blog/proxylab/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
